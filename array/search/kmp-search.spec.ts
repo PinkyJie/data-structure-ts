@@ -1,6 +1,6 @@
-import { kmpSearch } from "./kmp-search";
+import { kmpSearch } from './kmp-search';
 
-describe("KMP string match", () => {
+describe('KMP string match', () => {
   const sortedArr = [1, 3, 5, 7, 9];
 
   it.each<{
@@ -10,26 +10,23 @@ describe("KMP string match", () => {
     matchedIndices: number[];
   }>([
     {
-      text: "aabaacaadaabaaba",
-      pattern: "aaba",
+      text: 'aabaacaadaabaaba',
+      pattern: 'aaba',
       matchOne: false,
       matchedIndices: [0, 9, 12],
     },
     {
-      text: "aabaacaadaabaaba",
-      pattern: "aaba",
+      text: 'aabaacaadaabaaba',
+      pattern: 'aaba',
       matchedIndices: [0],
     },
     {
-      text: "ABABDABACDABABCABAB",
-      pattern: "ABABCABAB",
+      text: 'ABABDABACDABABCABAB',
+      pattern: 'ABABCABAB',
       matchOne: false,
       matchedIndices: [10],
     },
-  ])(
-    "should return correct matched indices for case %#",
-    ({ text, pattern, matchOne, matchedIndices }) => {
-      expect(kmpSearch(text, pattern, matchOne)).toEqual(matchedIndices);
-    }
-  );
+  ])('should return correct matched indices for case %#', ({ text, pattern, matchOne, matchedIndices }) => {
+    expect(kmpSearch(text, pattern, matchOne)).toEqual(matchedIndices);
+  });
 });

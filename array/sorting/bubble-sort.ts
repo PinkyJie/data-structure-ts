@@ -1,4 +1,4 @@
-import { swap } from "./util";
+import { swap } from './util';
 
 /**
  * Bubble Sort
@@ -13,11 +13,7 @@ import { swap } from "./util";
  */
 export function bubbleSort(arr: number[]) {
   const n = arr.length;
-  for (
-    let lastUnsortedIndex = n - 1;
-    lastUnsortedIndex > 0;
-    lastUnsortedIndex--
-  ) {
+  for (let lastUnsortedIndex = n - 1; lastUnsortedIndex > 0; lastUnsortedIndex--) {
     /**
      * Every inner loop will swap the "largest" number to the position at `lastUnsortedIndex`,
      * so that position becomes "sorted" ([lastUnsortedIndex...n]), `lastUnsortedIndex` can decrease by 1.

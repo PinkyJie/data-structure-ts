@@ -9,11 +9,7 @@
  * will try to match the `pattern` for each character in `text`, which will cost O(m(n-m+1)),
  * while KMP can use the previously partial matching information, only costs O(n).
  */
-export function kmpSearch(
-  text: string,
-  pattern: string,
-  matchOne: boolean = true
-): number[] {
+export function kmpSearch(text: string, pattern: string, matchOne = true): number[] {
   const m = pattern.length;
   const lpsTable = _buildLPSTable(pattern);
   let textIndex = 0;

@@ -16,7 +16,7 @@ export function insertionSort(arr: number[]) {
      * Every inner loop will insert the new element to the already sorted array ([0...lastSortedIndex]),
      * so `lastSortedIndex` can increase by 1.
      */
-    let elementToInsert = arr[lastSortedIndex + 1];
+    const elementToInsert = arr[lastSortedIndex + 1];
     let i = lastSortedIndex;
     for (; i >= 0; i--) {
       if (elementToInsert < arr[i]) {

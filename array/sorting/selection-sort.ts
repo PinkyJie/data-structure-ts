@@ -1,4 +1,4 @@
-import { swap } from "./util";
+import { swap } from './util';
 
 /**
  * Selection Sort

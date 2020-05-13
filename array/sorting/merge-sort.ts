@@ -31,12 +31,7 @@ function _mergeSort(arr: number[], startIndex: number, endIndex: number) {
  * O(endIndex - startIndex)
  * Note: additional space complexity O(endIndex - startIndex)
  */
-function _merge(
-  arr: number[],
-  startIndex: number,
-  endIndex: number,
-  middleIndex: number
-) {
+function _merge(arr: number[], startIndex: number, endIndex: number, middleIndex: number) {
   let rightIndex = middleIndex + 1;
   const sortedPartialArr = [];
   /**
