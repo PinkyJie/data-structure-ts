@@ -2,12 +2,12 @@
 
 # top-most EditorConfig file
 root = true
-indent_size = 2
 
 # Unix-style newlines with a newline ending every file
 [*]
 end_of_line = lf
 insert_final_newline = true
+indent_size = 2
 
 # 4 space indentation
 [*.ts]
