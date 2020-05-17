@@ -11,8 +11,8 @@ export enum GraphEdgeDirection {
 export class Graph {
   /** indicate the graphql is undirected or directed */
   private edgeDirection: GraphEdgeDirection;
-  /** vertices count */
-  verticesCount: number;
+  /** number of vertices */
+  numberOfVertices: number;
 
   /**
    * denote vertices from the graph as 0~n, every items in `edges` is a linked list
@@ -20,10 +20,10 @@ export class Graph {
    */
   edges: SinglyLinkedList<number>[] = [];
 
-  constructor(edgeDirection: GraphEdgeDirection, verticesCount: number) {
+  constructor(edgeDirection: GraphEdgeDirection, numberOfVertices: number) {
     this.edgeDirection = edgeDirection;
-    this.verticesCount = verticesCount;
-    for (let i = 0; i < verticesCount; i++) {
+    this.numberOfVertices = numberOfVertices;
+    for (let i = 0; i < numberOfVertices; i++) {
       this.edges.push(new SinglyLinkedList<number>());
     }
   }
@@ -41,7 +41,7 @@ export class Graph {
 
   toString(): string {
     const stringArr: string[] = [];
-    for (let i = 0; i < this.verticesCount; i++) {
+    for (let i = 0; i < this.numberOfVertices; i++) {
       stringArr.push(`|${i}|->`);
       if (this.edges[i].isEmpty()) {
         stringArr.push('null,');
