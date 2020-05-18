@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "jest",
-    "lint": "eslint '*/**/*.ts' --quiet --fix"
+    "lint": "eslint . --quiet --fix"
   },
   "devDependencies": {
     "@types/jest": "^25.2.2",
