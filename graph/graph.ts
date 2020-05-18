@@ -6,7 +6,7 @@ export enum GraphEdgeDirection {
 }
 
 /**
- * Graph implementation with Adjacent List.
+ * Graph implementation with Adjacency List.
  */
 export class Graph {
   /** indicate the graphql is undirected or directed */

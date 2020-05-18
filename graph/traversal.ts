@@ -42,15 +42,15 @@ export function dfsGraphTraversal(graph: Graph, doVisit: (vertex: number) => voi
   }
 }
 
-function _dfs(graph: Graph, source: number, visit: (vertex: number) => void, visited: boolean[]): void {
+function _dfs(graph: Graph, source: number, doVisit: (vertex: number) => void, visited: boolean[]): void {
   if (visited[source]) {
     return;
   }
   visited[source] = true;
-  visit(source);
+  doVisit(source);
   let node = graph.edges[source].dummyHead.nextNode;
   while (node) {
-    _dfs(graph, node.data, visit, visited);
+    _dfs(graph, node.data, doVisit, visited);
     node = node.nextNode;
   }
 }
