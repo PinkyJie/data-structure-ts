@@ -75,6 +75,13 @@ function _findStartVertex(inDegrees: number[], outDegrees: number[]): number {
   return outDegrees.findIndex((degree) => degree > 0);
 }
 
+/**
+ * How to find eulerian path: starting from vertex here, do dfs to remove the
+ * vertex after it's being visited (actually it's the edge being removed), until
+ * we find the vertex which does not have any connected edges any more, then
+ * this vertex must be the path end vertex. After that, we back trace to the
+ * last visited vertex, repeat this process.
+ */
 function _dfs(graph: Graph, vertex: number, paths: number[]): void {
   while (!graph.edges[vertex].isEmpty()) {
     const nextNode = graph.edges[vertex].deleteAtHead();
