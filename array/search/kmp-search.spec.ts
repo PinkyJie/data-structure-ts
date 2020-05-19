@@ -1,8 +1,6 @@
 import { kmpSearch } from './kmp-search';
 
 describe('KMP string match', () => {
-  const sortedArr = [1, 3, 5, 7, 9];
-
   it.each<{
     text: string;
     pattern: string;
