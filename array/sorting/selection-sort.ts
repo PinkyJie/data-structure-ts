@@ -9,7 +9,7 @@ import { swap } from './util';
  *  - no way to do early termination, always need to compare the selected element with all remaining elements
  *  - `n - selectedIndex` comparisons happen for each inner loop, at most 1 swap happens
  */
-export function selectionSort(arr: number[]) {
+export function selectionSort(arr: number[]): void {
   const n = arr.length;
   for (let selectedIndex = 0; selectedIndex < n; selectedIndex++) {
     /**

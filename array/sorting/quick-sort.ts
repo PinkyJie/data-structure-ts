@@ -16,12 +16,12 @@ import { swap } from './util';
  *  - every pivot we choose is the smallest/largest element in the sub array, this will generates
  * a 0-pivot-(k-1) partition, the binary tree will degraded to a skewed tree, so the tree height is n
  */
-export function quickSort(arr: number[]) {
+export function quickSort(arr: number[]): void {
   _quickSort(arr, 0, arr.length - 1);
 }
 
 // [startIndex...endIndex] will be sorted
-function _quickSort(arr: number[], startIndex: number, endIndex: number) {
+function _quickSort(arr: number[], startIndex: number, endIndex: number): void {
   if (startIndex < endIndex) {
     const pivotIndex = _partition(arr, startIndex, endIndex);
     _quickSort(arr, startIndex, pivotIndex - 1);
@@ -38,7 +38,7 @@ function _quickSort(arr: number[], startIndex: number, endIndex: number) {
  *
  * O(endIndex - startIndex)
  */
-function _partition(arr: number[], startIndex: number, endIndex: number) {
+function _partition(arr: number[], startIndex: number, endIndex: number): number {
   const pivot = arr[startIndex];
   let firstIndexLargerThanPivot = startIndex + 1;
   for (let i = firstIndexLargerThanPivot; i <= endIndex; i++) {

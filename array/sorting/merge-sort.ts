@@ -10,12 +10,12 @@
  * Best/Worst case: O(nlog(n))
  *  - always split the array to 2 equal arrays util each sub array only has 1 element
  */
-export function mergeSort(arr: number[]) {
+export function mergeSort(arr: number[]): void {
   _mergeSort(arr, 0, arr.length - 1);
 }
 
 // [startIndex...endIndex] will be sorted
-function _mergeSort(arr: number[], startIndex: number, endIndex: number) {
+function _mergeSort(arr: number[], startIndex: number, endIndex: number): void {
   if (startIndex < endIndex) {
     const middleIndex = Math.floor((startIndex + endIndex) / 2);
     _mergeSort(arr, startIndex, middleIndex);
@@ -31,7 +31,7 @@ function _mergeSort(arr: number[], startIndex: number, endIndex: number) {
  * O(endIndex - startIndex)
  * Note: additional space complexity O(endIndex - startIndex)
  */
-function _merge(arr: number[], startIndex: number, endIndex: number, middleIndex: number) {
+function _merge(arr: number[], startIndex: number, endIndex: number, middleIndex: number): void {
   let rightIndex = middleIndex + 1;
   const sortedPartialArr = [];
   /**

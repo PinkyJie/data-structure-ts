@@ -11,7 +11,7 @@ import { swap } from './util';
  * Worst case: reversed sorted array => O(n^2)
  *  - `lastUnsortedIndex` comparisons and swaps happen for each inner loop
  */
-export function bubbleSort(arr: number[]) {
+export function bubbleSort(arr: number[]): void {
   const n = arr.length;
   for (let lastUnsortedIndex = n - 1; lastUnsortedIndex > 0; lastUnsortedIndex--) {
     /**

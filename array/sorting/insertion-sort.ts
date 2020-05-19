@@ -9,7 +9,7 @@
  * Worst case: reversed sorted array => O(n^2)
  *  - `lastSortedIndex` comparisons and "move to right" happen for each inner loop
  */
-export function insertionSort(arr: number[]) {
+export function insertionSort(arr: number[]): void {
   const n = arr.length;
   for (let lastSortedIndex = 0; lastSortedIndex < n - 1; lastSortedIndex++) {
     /**

@@ -7,7 +7,7 @@
  *  - if k is way smaller than n, then it'll be O(n)
  *  - if k is way bigger than n, then space cost is too much
  */
-export function bucketSort(arr: number[]) {
+export function bucketSort(arr: number[]): void {
   const bucket: number[] = [];
   arr.forEach((element) => {
     if (!bucket[element]) {

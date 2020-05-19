@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "jest",
-    "lint": "eslint . --quiet --fix"
+    "lint": "eslint '*/**/*.ts'"
   },
   "devDependencies": {
     "@types/jest": "^25.2.2",
@@ -30,7 +30,8 @@
   },
   "lint-staged": {
     "*.ts": [
-      "yarn lint"
+      "eslint",
+      "prettier --write"
     ]
   }
 }

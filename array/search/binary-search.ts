@@ -10,7 +10,7 @@
  *  - if we need to insert `target` into the original array, the returned index will be the correct
  * index
  */
-export function binarySearch(sortedArr: number[], target: number) {
+export function binarySearch(sortedArr: number[], target: number): number {
   let startIndex = 0;
   let endIndex = sortedArr.length;
 
