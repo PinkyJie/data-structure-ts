@@ -1,4 +1,4 @@
-class BinaryTreeNode<TDataType> {
+export class BinaryTreeNode<TDataType> {
   data: TDataType;
   leftChild: BinaryTreeNode<TDataType>;
   rightChild: BinaryTreeNode<TDataType>;
@@ -85,6 +85,16 @@ export class BinaryTree<TDataType> {
     }
     return array;
   }
+
+  /** switch leftChild and rightChild for every node: O(n) */
+  reverse(): void {
+    _reverse(this.root);
+  }
+
+  /** calculate the height for the whole tree, e.g. root to the lowest leaf: O(n) */
+  height(): number {
+    return _height(this.root, 0);
+  }
 }
 
 function _buildTree<TDataType>(array: TDataType[]): BinaryTreeNode<TDataType> {
@@ -110,4 +120,28 @@ function _toArray<TDataType>(node: BinaryTreeNode<TDataType>, array: TDataType[]
     _toArray(node.leftChild, array);
     _toArray(node.rightChild, array);
   }
+}
+
+function _reverse<TDataType>(node: BinaryTreeNode<TDataType>): void {
+  if (!node) {
+    return;
+  }
+  const temp = node.leftChild;
+  node.leftChild = node.rightChild;
+  node.rightChild = temp;
+  _reverse(node.leftChild);
+  _reverse(node.rightChild);
+}
+
+/**
+ * Note: `curHeight` does not take `node` into consideration, the `+1` happens after we
+ * calculate both left sub tree height and right sub tree height.
+ */
+function _height<TDataType>(node: BinaryTreeNode<TDataType>, curHeight: number): number {
+  if (!node) {
+    return curHeight;
+  }
+  const leftTreeHeight = node.leftChild ? _height(node.leftChild, curHeight) : curHeight;
+  const rightTreeHeight = node.rightChild ? _height(node.rightChild, curHeight) : curHeight;
+  return Math.max(leftTreeHeight, rightTreeHeight) + 1;
 }
