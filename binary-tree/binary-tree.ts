@@ -13,10 +13,6 @@ export class BinaryTreeNode<TDataType> {
 export class BinaryTree<TDataType> {
   root: BinaryTreeNode<TDataType> = null;
 
-  constructor(rootData: TDataType) {
-    this.root = new BinaryTreeNode(rootData);
-  }
-
   /**
    * [0, 1, 2, 4, null, null, null, 3, 5, null, null, null, null] means:
    *  - 0 is the root node, its left is 1, right is null
@@ -25,8 +21,8 @@ export class BinaryTree<TDataType> {
    *  - 3's left is 5, right is null
    *  - 4 and 5's left and right are both null
    */
-  static buildTreeDFS<TDataType>(array: TDataType[]): BinaryTree<TDataType> {
-    const tree = new BinaryTree(array[0]);
+  static fromArrayDFS<TDataType>(array: TDataType[]): BinaryTree<TDataType> {
+    const tree = new BinaryTree<TDataType>();
     tree.root = _buildTree(array);
     return tree;
   }
@@ -45,8 +41,9 @@ export class BinaryTree<TDataType> {
    *  - 3's left is 5, right is null
    *  - 4 and 5's left and right are both null
    */
-  static buildTreeBFS<TDataType>(array: TDataType[]): BinaryTree<TDataType> {
-    const tree = new BinaryTree(array[0]);
+  static fromArrayBFS<TDataType>(array: TDataType[]): BinaryTree<TDataType> {
+    const tree = new BinaryTree<TDataType>();
+    tree.root = new BinaryTreeNode(array[0]);
     const parentQueue = [tree.root];
     let i = 1;
     while (i < array.length) {

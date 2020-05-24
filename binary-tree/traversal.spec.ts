@@ -38,7 +38,7 @@ describe('Binary tree traversal', () => {
       postOrderResult: [4, 3, 2, 1, 0],
     },
   ])('should traverse the tree for case %#', ({ treeArray, inOrderResult, preOrderResult, postOrderResult }) => {
-    const tree = BinaryTree.buildTreeBFS(treeArray);
+    const tree = BinaryTree.fromArrayBFS(treeArray);
 
     // in order
     const inOrderArr: number[] = [];
