@@ -138,7 +138,7 @@ function _height<TDataType>(node: BinaryTreeNode<TDataType>, curHeight: number):
   if (!node) {
     return curHeight;
   }
-  const leftTreeHeight = node.leftChild ? _height(node.leftChild, curHeight) : curHeight;
-  const rightTreeHeight = node.rightChild ? _height(node.rightChild, curHeight) : curHeight;
+  const leftTreeHeight = _height(node.leftChild, curHeight);
+  const rightTreeHeight = _height(node.rightChild, curHeight);
   return Math.max(leftTreeHeight, rightTreeHeight) + 1;
 }
