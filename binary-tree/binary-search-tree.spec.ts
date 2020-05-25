@@ -197,7 +197,7 @@ describe('Binary search tree:', () => {
   });
 
   describe('delete():', () => {
-    it.each<[string, { nodeToDelete: number; resultTree: number[]; resultNode: number }]>([
+    it.each<[string, { nodeToDelete: number; resultTree: number[] }]>([
       [
         'which is root node',
         {
@@ -229,7 +229,6 @@ describe('Binary search tree:', () => {
             null,
             null,
           ],
-          resultNode: 10,
         },
       ],
       [
@@ -263,7 +262,6 @@ describe('Binary search tree:', () => {
             null,
             null,
           ],
-          resultNode: 5,
         },
       ],
       [
@@ -297,7 +295,6 @@ describe('Binary search tree:', () => {
             null,
             null,
           ],
-          resultNode: 16,
         },
       ],
       [
@@ -331,7 +328,6 @@ describe('Binary search tree:', () => {
             null,
             null,
           ],
-          resultNode: 20,
         },
       ],
       [
@@ -365,7 +361,6 @@ describe('Binary search tree:', () => {
             null,
             null,
           ],
-          resultNode: 3,
         },
       ],
       [
@@ -399,7 +394,6 @@ describe('Binary search tree:', () => {
             null,
             null,
           ],
-          resultNode: 7,
         },
       ],
       [
@@ -433,7 +427,6 @@ describe('Binary search tree:', () => {
             null,
             null,
           ],
-          resultNode: 15,
         },
       ],
       [
@@ -469,10 +462,9 @@ describe('Binary search tree:', () => {
             null,
             null,
           ],
-          resultNode: null,
         },
       ],
-    ])('should delete node %s', (_, { nodeToDelete, resultTree, resultNode }) => {
+    ])('should delete node %s', (_, { nodeToDelete, resultTree }) => {
       const tree = BinarySearchTree.fromArrayBFS([
         10,
         7,
@@ -503,11 +495,7 @@ describe('Binary search tree:', () => {
         null,
       ]);
       const binarySearchTree = BinarySearchTree.fromBinaryTree(tree);
-      if (resultNode === null) {
-        expect(binarySearchTree.delete(nodeToDelete)).toBeNull();
-      } else {
-        expect(binarySearchTree.delete(nodeToDelete).data).toBe(resultNode);
-      }
+      binarySearchTree.delete(nodeToDelete);
       expect(binarySearchTree.toArrayBFS()).toEqual(resultTree);
     });
   });

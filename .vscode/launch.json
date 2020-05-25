@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Jest Current Test",
       "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": ["${relativeFile}", "--config", "jest.config.js"],
+      "args": ["${relativeFile}", "--config", "jest.config.js", "--coverage=0"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true
