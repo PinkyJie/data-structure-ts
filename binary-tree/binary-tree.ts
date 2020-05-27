@@ -131,14 +131,11 @@ function _reverse<TDataType>(node: BinaryTreeNode<TDataType>): void {
 }
 
 /**
- * Note: `curHeight` does not take `node` into consideration, the `+1` happens after we
- * calculate both left sub tree height and right sub tree height.
+ * The number of edges on the longest path between a node and a descendant leaf.
+ *  - height for the leaf node is 0.
  */
 function _height<TDataType>(node: BinaryTreeNode<TDataType>, curHeight: number): number {
-  if (!node) {
-    return curHeight;
-  }
-  const leftTreeHeight = _height(node.leftChild, curHeight);
-  const rightTreeHeight = _height(node.rightChild, curHeight);
-  return Math.max(leftTreeHeight, rightTreeHeight) + 1;
+  const leftTreeHeight = node.leftChild ? _height(node.leftChild, curHeight) : 0;
+  const rightTreeHeight = node.rightChild ? _height(node.rightChild, curHeight) : 0;
+  return node.leftChild || node.rightChild ? Math.max(leftTreeHeight, rightTreeHeight) + 1 : curHeight;
 }

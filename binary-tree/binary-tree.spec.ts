@@ -73,20 +73,20 @@ describe('Binary tree:', () => {
 
   describe('height():', () => {
     it.each<{ treeArray: number[]; height: number }>([
-      { treeArray: [0, 1, 2, null, 3, null, null, 4, null, null, 5, null, null], height: 5 },
+      { treeArray: [0, 1, 2, null, 3, null, null, 4, null, null, 5, null, null], height: 4 },
       // single root tree
       {
         treeArray: [0, null, null],
-        height: 1,
+        height: 0,
       },
       // right sub tree is empty
-      { treeArray: [0, 1, null, 2, 3, 4, 5, null, null, null, null, null, null], height: 4 },
+      { treeArray: [0, 1, null, 2, 3, 4, 5, null, null, null, null, null, null], height: 3 },
       // left sub tree is empty
-      { treeArray: [0, null, 1, 2, 3, null, null, 4, 5, null, null, null, null], height: 4 },
+      { treeArray: [0, null, 1, 2, 3, null, null, 4, 5, null, null, null, null], height: 3 },
       // left skewed tree
-      { treeArray: [0, 1, null, 2, null, 3, null, 4, null, null, null], height: 5 },
+      { treeArray: [0, 1, null, 2, null, 3, null, 4, null, null, null], height: 4 },
       // right skewed tree
-      { treeArray: [0, null, 1, null, 2, null, 3, null, 4, null, null], height: 5 },
+      { treeArray: [0, null, 1, null, 2, null, 3, null, 4, null, null], height: 4 },
     ])('should get the height of the tree for case %#', ({ treeArray, height }) => {
       const tree = BinaryTree.fromArrayBFS(treeArray);
       expect(tree.height()).toBe(height);

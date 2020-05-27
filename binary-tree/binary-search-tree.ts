@@ -1,5 +1,7 @@
 import { BinaryTree, BinaryTreeNode } from './binary-tree';
 
+export type BinarySearchTreeNode = BinaryTreeNode<number>;
+
 /**
  * Binary Search Tree: for any node in the tree,
  * node data for left sub tree < node data for parent < node data for right sub tree
@@ -18,7 +20,7 @@ export class BinarySearchTree extends BinaryTree<number> {
   }
 
   /** O(h) h: log(n)~n */
-  search(data: number): BinaryTreeNode<number> {
+  search(data: number): BinarySearchTreeNode {
     return _search(this.root, data);
   }
 
@@ -28,12 +30,12 @@ export class BinarySearchTree extends BinaryTree<number> {
   }
 
   /** O(h) h: log(n)~n */
-  delete(data: number): BinaryTreeNode<number> {
+  delete(data: number): BinarySearchTreeNode {
     return _delete(this.root, data);
   }
 }
 
-function _search(node: BinaryTreeNode<number>, data: number): BinaryTreeNode<number> {
+function _search(node: BinarySearchTreeNode, data: number): BinarySearchTreeNode {
   if (!node) {
     return null;
   }
@@ -47,7 +49,7 @@ function _search(node: BinaryTreeNode<number>, data: number): BinaryTreeNode<num
 }
 
 /** will always return the updated version of the node we passed in */
-function _insert(node: BinaryTreeNode<number>, data: number): BinaryTreeNode<number> {
+function _insert(node: BinarySearchTreeNode, data: number): BinarySearchTreeNode {
   if (!node) {
     return new BinaryTreeNode(data);
   }
@@ -60,7 +62,7 @@ function _insert(node: BinaryTreeNode<number>, data: number): BinaryTreeNode<num
 }
 
 /** will always return the updated version of the node we passed in */
-function _delete(node: BinaryTreeNode<number>, data: number): BinaryTreeNode<number> {
+function _delete(node: BinarySearchTreeNode, data: number): BinarySearchTreeNode {
   if (!node) {
     return null;
   }
@@ -99,7 +101,7 @@ function _delete(node: BinaryTreeNode<number>, data: number): BinaryTreeNode<num
   return node;
 }
 
-function _findRightMostNode(node: BinaryTreeNode<number>): BinaryTreeNode<number> {
+function _findRightMostNode(node: BinarySearchTreeNode): BinarySearchTreeNode {
   while (node.rightChild) {
     node = node.rightChild;
   }
