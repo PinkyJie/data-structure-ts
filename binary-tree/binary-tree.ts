@@ -3,6 +3,13 @@ export class BinaryTreeNode<TDataType> {
   leftChild: BinaryTreeNode<TDataType>;
   rightChild: BinaryTreeNode<TDataType>;
 
+  /**
+   * For some kind of binary trees (like AVL tree), we need to store the `height`
+   * at the node level to quickly calculate the height difference between different
+   * sub trees.
+   */
+  height?: number;
+
   constructor(data: TDataType) {
     this.data = data;
     this.leftChild = null;
