@@ -30,10 +30,10 @@ export class AVLTree extends BinarySearchTree {
     this.root = _insert(this.root, data);
   }
 
-  // /** O(log(n)) */
-  // delete(data: number): AVLTreeNode {
-  //   return _delete(this.root, data);
-  // }
+  /** O(log(n)) */
+  delete(data: number): AVLTreeNode {
+    return _delete(this.root, data);
+  }
 }
 
 /**
@@ -103,49 +103,92 @@ function _insert(node: AVLTreeNode, data: number): AVLTreeNode {
    * here we will pass the insertion path recursively from `nodeToInsert`
    * back to `root`, the same route as insertion happens, but reversely.
    *
-   * What we need to do here is to check the height difference for each
-   * passed node to see if it violates the rule |H(left) - H(right)| > 1.
-   *
-   * If node `v` violates, we need to do rotation to fix it:
-   *  - check its child node `c` and grand child node `p` on the travelled path
-   *  - there will be 4 different cases:
-   *    - 1. Left Left   -> `v`'s left height is larger than right, `c`'s left is larger than right
-   *    - 2. Left Right  -> `v`'s left height is larger than right, `c`'s right is larger than left
-   *    - 3. Right Left  -> `v`'s right height is larger than left, `c`'s left is larger than right
-   *    - 4. Right Right -> `v`'s right height is larger than left, `c`'s right is larger than left
-   *  - handle these 4 cases with different strategy:
-   *      1.   v      right rotation on v         c
-   *          / \                               /   \
-   *         c   T4                            p     v
-   *        / \                               / \   / \
-   *       p   T3                            T1 T2 T3 T4
-   *      / \
-   *     T1 T2
-   *
-   *      2.   v      left rotation on c     v    same as 1, do right rotation on c
-   *          / \                           / \
-   *         c  T4                         p  T4
-   *        / \                           / \
-   *       T1  p                         c  T3
-   *          / \                       / \
-   *         T2 T3                     T1 T2
-   *
-   *      3.   v      left rotation on v       c
-   *          / \                            /   \
-   *         T1  c                          v     p
-   *            / \                        / \   / \
-   *           T2  p                      T1 T2 T3 T4
-   *              / \
-   *             T3 T4
-   *
-   *      4.   v      right rotation on c    v    same as 3, do left rotation on v
-   *          / \                           / \
-   *         T1  c                         T1  p
-   *            / \                           / \
-   *           p  T4                         T2  c
-   *          / \                               / \
-   *         T2 T3                             T3 T4
    */
+  return _reBalance(node);
+}
+
+/**
+ * 1. perform normal BST deletion
+ * 2. check the height difference fore the node
+ * 3. do re-balance if the difference is larger than 1
+ */
+function _delete(node: AVLTreeNode, data: number): AVLTreeNode {
+  // normal BST deletion
+  if (!node) {
+    return null;
+  }
+  if (data < node.data) {
+    node.leftChild = _delete(node.leftChild, data);
+  } else if (data > node.data) {
+    node.rightChild = _delete(node.rightChild, data);
+  } else {
+    if (!node.leftChild) {
+      return node.rightChild;
+    }
+    if (!node.rightChild) {
+      return node.leftChild;
+    }
+
+    const largestNodeInLeftSubTree = _findRightMostNode(node.leftChild);
+    node.leftChild = _delete(node.leftChild, largestNodeInLeftSubTree.data);
+    node.data = largestNodeInLeftSubTree.data;
+  }
+
+  return _reBalance(node);
+}
+
+function _findRightMostNode(node: AVLTreeNode): AVLTreeNode {
+  while (node.rightChild) {
+    node = node.rightChild;
+  }
+  return node;
+}
+
+/**
+ * What we need to do here is to check the height difference for each
+ * passed node to see if it violates the rule |H(left) - H(right)| > 1.
+ *
+ * If node `v` violates, we need to do rotation to fix it:
+ *  - check its child node `c` and grand child node `p` on the travelled path
+ *  - there will be 4 different cases:
+ *    - 1. Left Left   -> `v`'s left height is larger than right, `c`'s left is larger than right
+ *    - 2. Left Right  -> `v`'s left height is larger than right, `c`'s right is larger than left
+ *    - 3. Right Left  -> `v`'s right height is larger than left, `c`'s left is larger than right
+ *    - 4. Right Right -> `v`'s right height is larger than left, `c`'s right is larger than left
+ *  - handle these 4 cases with different strategy:
+ *      1.   v      right rotation on v         c
+ *          / \                               /   \
+ *         c   T4                            p     v
+ *        / \                               / \   / \
+ *       p   T3                            T1 T2 T3 T4
+ *      / \
+ *     T1 T2
+ *
+ *      2.   v      left rotation on c     v    same as 1, do right rotation on c
+ *          / \                           / \
+ *         c  T4                         p  T4
+ *        / \                           / \
+ *       T1  p                         c  T3
+ *          / \                       / \
+ *         T2 T3                     T1 T2
+ *
+ *      3.   v      left rotation on v       c
+ *          / \                            /   \
+ *         T1  c                          v     p
+ *            / \                        / \   / \
+ *           T2  p                      T1 T2 T3 T4
+ *              / \
+ *             T3 T4
+ *
+ *      4.   v      right rotation on c    v    same as 3, do left rotation on v
+ *          / \                           / \
+ *         T1  c                         T1  p
+ *            / \                           / \
+ *           p  T4                         T2  c
+ *          / \                               / \
+ *         T2 T3                             T3 T4
+ */
+function _reBalance(node: AVLTreeNode): AVLTreeNode {
   const heightDifference = _getHeightDifference(node);
   if (heightDifference > 1) {
     // v's left height is larger than right height
@@ -187,6 +230,18 @@ function _getHeightDifference(node: AVLTreeNode): number {
 /**
  * This height is different from the height() in `BinaryTree`, in order to help us
  * calculate the height difference, we should treat leaf's height as 1.
+ *
+ * Why? Think about this case:
+ *       x (h:2)                   x (h:3)
+ *      /                         /
+ *     y (h:1)        V.S.       y (h:2)
+ *    /                         /
+ *   z (h:0)                   z (h:1)
+ * For node x, obviously it's unbalanced, but if we follow the original height() [Left]
+ * calculation, its left sub tree height (y - 1) minus its right sub tree height 0
+ * will be 1, which does not violate the rule. If we choose the new height (Right), its
+ * left sub tree height is 2, right sub tree height is 0, which violates the rule. Basically
+ * we set leaf node's height to 1 so we can distinguish leaf node with null node.
  */
 function _updateNodeHeight(node: AVLTreeNode, curHeight: number): number {
   const leftTreeHeight = node.leftChild ? _updateNodeHeight(node.leftChild, curHeight) : 0;

@@ -2,8 +2,6 @@ import { BinaryTree } from './binary-tree';
 import { AVLTree } from './avl-tree';
 
 describe('AVL tree:', () => {
-  const treeSample = [13, 10, 15, 5, 11, null, 18, 4, 8, null, null, null, null, null, null, null, null];
-
   describe('insert()', () => {
     it.each<[string, { nodeToInsert: number; resultTree: number[] }]>([
       [
@@ -42,11 +40,125 @@ describe('AVL tree:', () => {
         },
       ],
     ])('should insert node %s', (_, { nodeToInsert, resultTree }) => {
-      const tree = BinaryTree.fromArrayBFS(treeSample);
+      const tree = BinaryTree.fromArrayBFS([
+        13,
+        10,
+        15,
+        5,
+        11,
+        null,
+        18,
+        4,
+        8,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      ]);
       const avlTree = AVLTree.fromBinaryTree(tree);
       // make sure each node has height before insertion
       avlTree.updateNodeHeight();
       avlTree.insert(nodeToInsert);
+      expect(avlTree.toArrayBFS()).toEqual(resultTree);
+    });
+  });
+
+  describe('delete()', () => {
+    it.each<[string, { nodeToInsert: number[]; resultTree: number[] }]>([
+      [
+        'with no rotation required',
+        {
+          nodeToInsert: [8],
+          resultTree: [
+            13,
+            10,
+            15,
+            5,
+            11,
+            14,
+            19,
+            4,
+            null,
+            null,
+            null,
+            null,
+            null,
+            18,
+            20,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+          ],
+        },
+      ],
+      [
+        'with case left left',
+        {
+          nodeToInsert: [8, 11],
+          resultTree: [13, 5, 15, 4, 10, 14, 19, null, null, null, null, null, null, 18, 20, null, null, null, null],
+        },
+      ],
+      [
+        'with case left right',
+        {
+          nodeToInsert: [4, 11],
+          resultTree: [13, 8, 15, 5, 10, 14, 19, null, null, null, null, null, null, 18, 20, null, null, null, null],
+        },
+      ],
+      [
+        'with case right right',
+        {
+          nodeToInsert: [14, 18],
+          resultTree: [13, 10, 19, 5, 11, 15, 20, 4, 8, null, null, null, null, null, null, null, null, null, null],
+        },
+      ],
+      [
+        'with case right left',
+        {
+          nodeToInsert: [14, 20],
+          resultTree: [13, 10, 18, 5, 11, 15, 19, 4, 8, null, null, null, null, null, null, null, null, null, null],
+        },
+      ],
+    ])('should delete node %s', (_, { nodeToInsert, resultTree }) => {
+      const tree = BinaryTree.fromArrayBFS([
+        13,
+        10,
+        15,
+        5,
+        11,
+        14,
+        19,
+        4,
+        8,
+        null,
+        null,
+        null,
+        null,
+        18,
+        20,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      ]);
+      const avlTree = AVLTree.fromBinaryTree(tree);
+      // make sure each node has height before insertion
+      avlTree.updateNodeHeight();
+
+      nodeToInsert.forEach((node) => {
+        avlTree.delete(node);
+      });
       expect(avlTree.toArrayBFS()).toEqual(resultTree);
     });
   });
