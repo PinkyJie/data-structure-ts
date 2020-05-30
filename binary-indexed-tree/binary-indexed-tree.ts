@@ -6,7 +6,9 @@
  * Sum(0...2), ...] can also solve the same problem, but if the original array elements get updated
  * frequently, the performance of binary indexed tree is much better. The "prefix sum array" needs
  * to update every range sum if element 0 changes (O(n)), while for binary indexed tree, the
- * update only takes O(log(n)).
+ * update only takes O(log(n)). The main idea behind this is to store ranged sum on each tree node,
+ * so if one element is updated in the original array, only limited number of tree nodes need to
+ * update.
  *    - it's not a real tree structure in storage, it's just an array with (n+1) elements, 1 more
  * element than the original array in term of space, index 0 is the dummy node, index 1-n will
  * store the actual prefix sum.
@@ -56,6 +58,16 @@ export class BinaryIndexedTree {
   treeArray: number[];
 
   /**
+   * To build a binary indexed tree from an array, call `update()` above for each element
+   * to insert the element in the tree. Treat it as: by default all element in the array
+   * is 0, we update each element with their real value by calling `update()`.
+   */
+  buildTree(array: number[]): void {
+    this.treeArray = Array.from({ length: array.length + 1 }, () => 0);
+    array.forEach((item, index) => this.update(index, item));
+  }
+
+  /**
    * Update the tree when we change the value of `arrayIndex` from the original array.
    * Time: O(log(n))
    *
@@ -75,20 +87,10 @@ export class BinaryIndexedTree {
   }
 
   /**
-   * To build a binary indexed tree from an array, call `update()` above for each element
-   * to insert the element in the tree. Treat it as: by default all element in the array
-   * is 0, we update each element with their real value by calling `update()`.
-   */
-  buildTree(array: number[]): void {
-    this.treeArray = Array.from({ length: array.length + 1 }, () => 0);
-    array.forEach((item, index) => this.update(index, item));
-  }
-
-  /**
    * Query the prefix sum, return the sum of elements from 0 to `arrayIndex` (inclusive).
    * Time: O(log(n))
    */
-  getPrefixSum(arrayIndex: number): number {
+  queryPrefixSum(arrayIndex: number): number {
     let sum = 0;
     let nodeIndex = arrayIndex + 1;
     while (nodeIndex > 0) {
@@ -101,9 +103,9 @@ export class BinaryIndexedTree {
   /**
    * Return the ranged sum from `startArrayIndex` to `endArrayIndex` (inclusive).
    */
-  getRangeSum(startArrayIndex: number, endArrayIndex: number): number {
+  queryRangeSum(startArrayIndex: number, endArrayIndex: number): number {
     // use prefix Sum(0, end) - Sum(0, start - 1)
-    return this.getPrefixSum(endArrayIndex) - this.getPrefixSum(startArrayIndex - 1);
+    return this.queryPrefixSum(endArrayIndex) - this.queryPrefixSum(startArrayIndex - 1);
   }
 }
 
