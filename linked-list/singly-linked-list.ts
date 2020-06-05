@@ -1,4 +1,4 @@
-class SinglyLinkedListNode<TDataType> {
+export class SinglyLinkedListNode<TDataType> {
   data: TDataType;
   nextNode: SinglyLinkedListNode<TDataType>;
 
