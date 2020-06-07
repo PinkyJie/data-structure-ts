@@ -4,9 +4,9 @@ describe('Binary Heap:', () => {
   const array = [68, 69, 66, 15, 91, 98, 17, 37];
 
   describe('Max heap:', () => {
-    const maxHeapComparator: PriorityComparatorFunc = (a, b) => a > b;
+    const maxHeapComparator: PriorityComparatorFunc<number> = (a, b) => a > b;
 
-    function checkMaxHeapValidity(heap: BinaryHeap): boolean {
+    function checkMaxHeapValidity(heap: BinaryHeap<number>): boolean {
       for (let i = 1; i < heap.treeArray.length - 1; i++) {
         const parent = heap.treeArray[i];
         const leftChild = heap._hasLeftChild(i) ? heap.treeArray[heap._getLeftChildIndex(i)] : -Infinity;
@@ -92,9 +92,9 @@ describe('Binary Heap:', () => {
   });
 
   describe('Min heap:', () => {
-    const minHeapComparator: PriorityComparatorFunc = (a, b) => b > a;
+    const minHeapComparator: PriorityComparatorFunc<number> = (a, b) => b > a;
 
-    function checkMinHeapValidity(heap: BinaryHeap): boolean {
+    function checkMinHeapValidity(heap: BinaryHeap<number>): boolean {
       for (let i = 1; i < heap.treeArray.length - 1; i++) {
         const parent = heap.treeArray[i];
         const leftChild = heap._hasLeftChild(i) ? heap.treeArray[heap._getLeftChildIndex(i)] : Infinity;

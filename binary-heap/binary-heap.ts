@@ -1,6 +1,10 @@
 import { swap } from '../_util';
 
-export type PriorityComparatorFunc = (a: number, b: number) => boolean;
+/**
+ * Priority comparator function: used to decide which element has higher priority, return true
+ * if first element has higher priority then the second one.
+ */
+export type PriorityComparatorFunc<TDataType> = (a: TDataType, b: TDataType) => boolean;
 
 /**
  * Binary max/min heap:
@@ -23,20 +27,16 @@ export type PriorityComparatorFunc = (a: number, b: number) => boolean;
  * index 0 as empty to ensure: given index t, its left child index is t*2, right child index is
  * t*2+1, its parent index is Math.floor(t/2). [ease index calculation]
  */
-export class BinaryHeap {
+export class BinaryHeap<TDataType> {
   /**
    * The actual array which stores the heap, for heaps which has n elements,
    * the array size will be n+1 cause index 0 does not store anything.
    */
-  treeArray: number[] = [null];
+  treeArray: TDataType[] = [null];
 
-  /**
-   * Priority comparator function: used to decide which element has higher priority, return true
-   * if first element has higher priority then the second one.
-   */
-  priorityComparatorFunc: PriorityComparatorFunc;
+  priorityComparatorFunc: PriorityComparatorFunc<TDataType>;
 
-  constructor(priorityComparatorFunc: PriorityComparatorFunc) {
+  constructor(priorityComparatorFunc: PriorityComparatorFunc<TDataType>) {
     this.priorityComparatorFunc = priorityComparatorFunc;
   }
 
@@ -45,7 +45,10 @@ export class BinaryHeap {
    *
    * For each element in the array, insert it into the heap.
    */
-  static buildHeap(array: number[], priorityComparatorFunc: PriorityComparatorFunc): BinaryHeap {
+  static buildHeap<TDataType>(
+    array: TDataType[],
+    priorityComparatorFunc: PriorityComparatorFunc<TDataType>,
+  ): BinaryHeap<TDataType> {
     const heap = new BinaryHeap(priorityComparatorFunc);
     array.forEach((item) => {
       heap.insert(item);
@@ -73,7 +76,10 @@ export class BinaryHeap {
    * nodes are in the bottom for the tree, so if we use "_siftDown()" completely to
    * build a heap, it will be more efficient.
    */
-  static buildHeapInPlace(array: number[], priorityComparatorFunc: PriorityComparatorFunc): BinaryHeap {
+  static buildHeapInPlace<TDataType>(
+    array: TDataType[],
+    priorityComparatorFunc: PriorityComparatorFunc<TDataType>,
+  ): BinaryHeap<TDataType> {
     array.unshift(null);
     const heap = new BinaryHeap(priorityComparatorFunc);
     heap.treeArray = array;
@@ -165,7 +171,7 @@ export class BinaryHeap {
    * Insert the `data` to the last node of the tree (push to array), then
    * compare it with its parent to adjust its position through `_siftUp()`.
    */
-  insert(data: number): void {
+  insert(data: TDataType): void {
     this.treeArray.push(data);
     this._siftUp(this.treeArray.length - 1);
   }
@@ -175,10 +181,16 @@ export class BinaryHeap {
    *
    * Find the `data` in the tree and return its index.
    */
-  _findIndex(data: number): number {
+  private _findIndex(data: TDataType, customEqual?: (data1: TDataType, data2: TDataType) => boolean): number {
     for (let i = 1; i < this.treeArray.length; i++) {
-      if (this.treeArray[i] === data) {
-        return i;
+      if (customEqual) {
+        if (customEqual(this.treeArray[i], data)) {
+          return i;
+        }
+      } else {
+        if (this.treeArray[i] === data) {
+          return i;
+        }
       }
     }
     return -1;
@@ -190,7 +202,7 @@ export class BinaryHeap {
    * Replace the `index` with the last node of the tree (last element in the array),
    * then compare it with its children to adjust its position through `_siftDown()`.
    */
-  _deleteIndex(index: number): void {
+  private _deleteIndex(index: number): void {
     if (index === this.treeArray.length - 1) {
       this.treeArray.pop();
     } else {
@@ -204,9 +216,12 @@ export class BinaryHeap {
    * O(n)
    *
    * Delete the `data`, find it first via `_find` then delete it via `_deleteIndex`.
+   *
+   * Note: for custom `TDataType`, pass the `customEqual` as 2nd parameter so we can
+   * use that function to do custom logic to check equality for two items.
    */
-  delete(data: number): void {
-    const index = this._findIndex(data);
+  delete(data: TDataType, customEqual?: (data1: TDataType, data2: TDataType) => boolean): void {
+    const index = this._findIndex(data, customEqual);
     if (index === -1) {
       return;
     }
@@ -214,7 +229,7 @@ export class BinaryHeap {
   }
 
   /** O(1) - return the root node directly */
-  getHighestPriorityData(): number {
+  getHighestPriorityData(): TDataType {
     if (this.isEmpty()) {
       return null;
     }
