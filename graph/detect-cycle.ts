@@ -7,21 +7,23 @@ import { DisjointSet } from './disjoint-set';
 export function detectCycleWithDisjointSet(graph: Graph): boolean {
   // for undirected graph, we need to make sure edge is only used once
   const visitedEdges: {
-    [vertex: string]: number;
+    [vertexId: string]: number;
   } = {};
 
   const disjointSet = new DisjointSet(graph.numberOfVertices);
-  for (let i = 0; i < graph.numberOfVertices; i++) {
-    const rootForI = disjointSet.find(i);
-    let node = graph.edges[i].dummyHead.nextNode;
+  for (let vertexId = 0; vertexId < graph.numberOfVertices; vertexId++) {
+    const rootForI = disjointSet.find(vertexId);
+    const vertex = graph.vertices[vertexId];
+    let node = vertex.edges.dummyHead.nextNode;
     while (node) {
-      if (visitedEdges[node.data] !== i) {
-        visitedEdges[i] = node.data;
-        const rootForNode = disjointSet.find(node.data);
+      const targetVertexId = node.data.targetVertex.id;
+      if (visitedEdges[targetVertexId] !== vertexId) {
+        visitedEdges[vertexId] = targetVertexId;
+        const rootForNode = disjointSet.find(targetVertexId);
         if (rootForI === rootForNode) {
           return true;
         }
-        disjointSet.union(i, node.data);
+        disjointSet.union(vertexId, targetVertexId);
       }
       node = node.nextNode;
     }
@@ -51,8 +53,8 @@ export function detectCycleWithDFS(graph: Graph): boolean {
     [vertex: string]: number;
   } = {};
 
-  for (let i = 0; i < graph.numberOfVertices; i++) {
-    const result = _detectCycleFromSource(graph, i, visiting, fullyVisited, visitedEdges);
+  for (let vertexId = 0; vertexId < graph.numberOfVertices; vertexId++) {
+    const result = _detectCycleFromSource(graph, vertexId, visiting, fullyVisited, visitedEdges);
     if (result) {
       return true;
     }
@@ -62,7 +64,7 @@ export function detectCycleWithDFS(graph: Graph): boolean {
 
 function _detectCycleFromSource(
   graph: Graph,
-  source: number,
+  sourceVertexId: number,
   visiting: boolean[],
   fullyVisited: boolean[],
   visitedEdges: {
@@ -70,20 +72,22 @@ function _detectCycleFromSource(
   },
 ): boolean {
   // skip vertex if all its connected vertices are being visited already
-  if (fullyVisited[source]) {
+  if (fullyVisited[sourceVertexId]) {
     return false;
   }
   // if the same vertex is encountered when it is still in visiting status, then a cycle is found
-  if (visiting[source]) {
+  if (visiting[sourceVertexId]) {
     return true;
   }
-  visiting[source] = true;
-  let node = graph.edges[source].dummyHead.nextNode;
+  visiting[sourceVertexId] = true;
+  const sourceVertex = graph.vertices[sourceVertexId];
+  let node = sourceVertex.edges.dummyHead.nextNode;
   while (node) {
+    const targetVertexId = node.data.targetVertex.id;
     // for undirected graph, we need to make sure edge is only used once
-    if (!graph.isUndirected() || visitedEdges[node.data] !== source) {
-      visitedEdges[source] = node.data;
-      const result = _detectCycleFromSource(graph, node.data, visiting, fullyVisited, visitedEdges);
+    if (!graph.isUndirected() || visitedEdges[targetVertexId] !== sourceVertexId) {
+      visitedEdges[sourceVertexId] = targetVertexId;
+      const result = _detectCycleFromSource(graph, targetVertexId, visiting, fullyVisited, visitedEdges);
       if (result) {
         return true;
       }
@@ -91,8 +95,8 @@ function _detectCycleFromSource(
     node = node.nextNode;
   }
   // all source's connected vertices are visited already
-  visiting[source] = false;
-  fullyVisited[source] = true;
+  visiting[sourceVertexId] = false;
+  fullyVisited[sourceVertexId] = true;
 
   return false;
 }

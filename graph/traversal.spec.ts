@@ -1,4 +1,4 @@
-import { GraphEdgeDirection, Graph } from './graph';
+import { GraphEdgeDirection, Graph, Vertex } from './graph';
 import { bfsGraphTraversal, dfsGraphTraversal } from './traversal';
 
 describe('Graph traversal: ', () => {
@@ -49,16 +49,16 @@ describe('Graph traversal: ', () => {
 
     // BFS
     const bfsArr: number[] = [];
-    const bfsVisit = (vertex: number): void => {
-      bfsArr.push(vertex);
+    const bfsVisit = (vertex: Vertex): void => {
+      bfsArr.push(vertex.id);
     };
     bfsGraphTraversal(graph, bfsVisit);
     expect(bfsArr).toEqual(bfsResult);
 
     // DFS
     const dfsArr: number[] = [];
-    const dfsVisit = (vertex: number): void => {
-      dfsArr.push(vertex);
+    const dfsVisit = (vertex: Vertex): void => {
+      dfsArr.push(vertex.id);
     };
     dfsGraphTraversal(graph, dfsVisit);
     expect(dfsArr).toEqual(dfsResult);

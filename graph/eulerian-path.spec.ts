@@ -3,7 +3,7 @@ import { findEulerianPathInDirectedGraph } from './eulerian-path';
 
 describe('Eulerian path:', () => {
   it('should return null if a directed graph has no eulerian path', () => {
-    const graph = new Graph(GraphEdgeDirection.Directed, 3);
+    const graph = new Graph(GraphEdgeDirection.Directed, 5);
     graph.addEdge(0, 1);
     graph.addEdge(1, 2);
     graph.addEdge(1, 4);

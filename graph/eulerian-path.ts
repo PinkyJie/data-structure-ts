@@ -9,9 +9,9 @@ export function findEulerianPathInDirectedGraph(graph: Graph): number[] {
   if (!_hasEulerianPath(inDegrees, outDegrees)) {
     return null;
   }
-  const startVertex = _findStartVertex(inDegrees, outDegrees);
+  const startVertexId = _findStartVertexId(inDegrees, outDegrees);
   const paths: number[] = [];
-  _dfs(graph, startVertex, paths);
+  _dfs(graph, startVertexId, paths);
   return paths;
 }
 
@@ -23,11 +23,12 @@ function _calculateInOutDegrees(
 } {
   const inDegrees: number[] = Array.from({ length: graph.numberOfVertices }, () => 0);
   const outDegrees: number[] = Array.from({ length: graph.numberOfVertices }, () => 0);
-  for (let i = 0; i < graph.numberOfVertices; i++) {
-    let node = graph.edges[i].dummyHead.nextNode;
+  for (let vertexId = 0; vertexId < graph.numberOfVertices; vertexId++) {
+    const vertex = graph.vertices[vertexId];
+    let node = vertex.edges.dummyHead.nextNode;
     while (node) {
-      outDegrees[i]++;
-      inDegrees[node.data]++;
+      outDegrees[vertexId]++;
+      inDegrees[node.data.targetVertex.id]++;
       node = node.nextNode;
     }
   }
@@ -62,7 +63,7 @@ function _hasEulerianPath(inDegrees: number[], outDegrees: number[]): boolean {
   return (startNodes === 0 && endNodes === 0) || (startNodes === 1 && endNodes === 1);
 }
 
-function _findStartVertex(inDegrees: number[], outDegrees: number[]): number {
+function _findStartVertexId(inDegrees: number[], outDegrees: number[]): number {
   for (let i = 0; i < inDegrees.length; i++) {
     if (outDegrees[i] - inDegrees[i] === 1) {
       return i;
@@ -82,10 +83,11 @@ function _findStartVertex(inDegrees: number[], outDegrees: number[]): number {
  * this vertex must be the path end vertex. After that, we back trace to the
  * last visited vertex, repeat this process.
  */
-function _dfs(graph: Graph, vertex: number, paths: number[]): void {
-  while (!graph.edges[vertex].isEmpty()) {
-    const nextNode = graph.edges[vertex].deleteAtHead();
-    _dfs(graph, nextNode.data, paths);
+function _dfs(graph: Graph, vertexId: number, paths: number[]): void {
+  const vertex = graph.vertices[vertexId];
+  while (!vertex.edges.isEmpty()) {
+    const nextNode = vertex.edges.deleteAtHead();
+    _dfs(graph, nextNode.data.targetVertex.id, paths);
   }
-  paths.unshift(vertex);
+  paths.unshift(vertexId);
 }

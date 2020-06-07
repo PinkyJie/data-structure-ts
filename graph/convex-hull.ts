@@ -15,6 +15,8 @@
  * clear the previous Collinearity array
  * 3. After finding the target, mark it as the new source and repeat 2 until the next
  * target equals to the original left most vertex.
+ *
+ * @param vertices a group of vertices represents by x,y coordinates
  */
 export function convexHull(vertices: [number, number][]): [number, number][] {
   /** prevent duplicate vertex being added */

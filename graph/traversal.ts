@@ -1,27 +1,28 @@
-import { Graph } from './graph';
+import { Graph, Vertex } from './graph';
 
 /**
  * Breath first search
  *
  * Time: O(V + E) - V the number of vertices, E the number of edges
  */
-export function bfsGraphTraversal(graph: Graph, doVisit: (vertex: number) => void): void {
+export function bfsGraphTraversal(graph: Graph, doVisit: (vertex: Vertex) => void): void {
   const visited = Array.from({ length: graph.numberOfVertices }, () => false);
 
   const queue: number[] = [];
   // for loop here in case some vertices are not connected with others
-  for (let i = 0; i < graph.numberOfVertices; i++) {
-    queue.push(i);
+  for (let vertexId = 0; vertexId < graph.numberOfVertices; vertexId++) {
+    queue.push(vertexId);
     while (queue.length > 0) {
-      const vertex = queue.shift();
-      if (visited[vertex]) {
+      const vertexId = queue.shift();
+      if (visited[vertexId]) {
         continue;
       }
-      visited[vertex] = true;
+      visited[vertexId] = true;
+      const vertex = graph.vertices[vertexId];
       doVisit(vertex);
-      let node = graph.edges[vertex].dummyHead.nextNode;
+      let node = vertex.edges.dummyHead.nextNode;
       while (node) {
-        queue.push(node.data);
+        queue.push(node.data.targetVertex.id);
         node = node.nextNode;
       }
     }
@@ -33,24 +34,25 @@ export function bfsGraphTraversal(graph: Graph, doVisit: (vertex: number) => voi
  *
  * Time: O(V + E) - V the number of vertices, E the number of edges
  */
-export function dfsGraphTraversal(graph: Graph, doVisit: (vertex: number) => void): void {
+export function dfsGraphTraversal(graph: Graph, doVisit: (vertex: Vertex) => void): void {
   const visited = Array.from({ length: graph.numberOfVertices }, () => false);
 
   // for loop here in case some vertices are not connected with others
-  for (let i = 0; i < graph.numberOfVertices; i++) {
-    _dfs(graph, i, doVisit, visited);
+  for (let vertexId = 0; vertexId < graph.numberOfVertices; vertexId++) {
+    _dfs(graph, vertexId, doVisit, visited);
   }
 }
 
-function _dfs(graph: Graph, source: number, doVisit: (vertex: number) => void, visited: boolean[]): void {
-  if (visited[source]) {
+function _dfs(graph: Graph, sourceVertexId: number, doVisit: (vertex: Vertex) => void, visited: boolean[]): void {
+  if (visited[sourceVertexId]) {
     return;
   }
-  visited[source] = true;
-  doVisit(source);
-  let node = graph.edges[source].dummyHead.nextNode;
+  visited[sourceVertexId] = true;
+  const sourceVertex = graph.vertices[sourceVertexId];
+  doVisit(sourceVertex);
+  let node = sourceVertex.edges.dummyHead.nextNode;
   while (node) {
-    _dfs(graph, node.data, doVisit, visited);
+    _dfs(graph, node.data.targetVertex.id, doVisit, visited);
     node = node.nextNode;
   }
 }
