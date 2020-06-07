@@ -1,9 +1,5 @@
 import { swap } from '../_util';
 
-/**
- * Priority comparator function: used to decide which element has higher priority, return true
- * if first element has higher priority then the second one.
- */
 export type PriorityComparatorFunc<TDataType> = (a: TDataType, b: TDataType) => boolean;
 
 /**
@@ -26,6 +22,7 @@ export type PriorityComparatorFunc<TDataType> = (a: TDataType, b: TDataType) => 
  * the above heap will be saved in array [0, 10, 8, 6, 5, 4, 3] (binary tree BFS array), leaving
  * index 0 as empty to ensure: given index t, its left child index is t*2, right child index is
  * t*2+1, its parent index is Math.floor(t/2). [ease index calculation]
+ *
  */
 export class BinaryHeap<TDataType> {
   /**
@@ -34,10 +31,31 @@ export class BinaryHeap<TDataType> {
    */
   treeArray: TDataType[] = [null];
 
-  priorityComparatorFunc: PriorityComparatorFunc<TDataType>;
+  /**
+   * A map to get the `treeArray` index by the `data`, especially useful for
+   * searching.
+   */
+  private _dataMap: {
+    [idOfData: string]: number;
+  } = {};
 
-  constructor(priorityComparatorFunc: PriorityComparatorFunc<TDataType>) {
-    this.priorityComparatorFunc = priorityComparatorFunc;
+  /** For complex `data` stored in the heap, this function is used to get an id from
+   * the `data`, so we can use the id as the key of the `_dataMap`.
+   */
+  private _getIdFromData: (data: TDataType) => number | string;
+
+  /**
+   * Priority comparator function: used to decide which element has higher priority,
+   * return true if first element has higher priority then the second one.
+   */
+  private _priorityComparatorFunc: PriorityComparatorFunc<TDataType>;
+
+  constructor(
+    priorityComparatorFunc: PriorityComparatorFunc<TDataType>,
+    getIdFromData: (data: TDataType) => number | string = (data): string => data.toString(),
+  ) {
+    this._priorityComparatorFunc = priorityComparatorFunc;
+    this._getIdFromData = getIdFromData;
   }
 
   /**
@@ -121,11 +139,13 @@ export class BinaryHeap<TDataType> {
   _siftUp(index: number): void {
     while (this._hasParent(index)) {
       const parentIndex = this._getParentIndex(index);
-      if (this.priorityComparatorFunc(this.treeArray[index], this.treeArray[parentIndex])) {
+      if (this._priorityComparatorFunc(this.treeArray[index], this.treeArray[parentIndex])) {
+        this._dataMap[this._getIdFromData(this.treeArray[index])] = parentIndex;
+        this._dataMap[this._getIdFromData(this.treeArray[parentIndex])] = index;
         swap(this.treeArray, index, parentIndex);
         index = parentIndex;
       } else {
-        // once no swap is required, break the loop cause no need to compare upward anymore
+        // once no swap is required, break the loop cause no need to compare upwards anymore
         break;
       }
     }
@@ -147,15 +167,17 @@ export class BinaryHeap<TDataType> {
       let higherPriorityChildIndex = leftChildIndex;
       if (
         this._hasRightChild(index) &&
-        this.priorityComparatorFunc(this.treeArray[rightChildIndex], this.treeArray[leftChildIndex])
+        this._priorityComparatorFunc(this.treeArray[rightChildIndex], this.treeArray[leftChildIndex])
       ) {
         higherPriorityChildIndex = rightChildIndex;
       }
-      if (this.priorityComparatorFunc(this.treeArray[higherPriorityChildIndex], this.treeArray[index])) {
+      if (this._priorityComparatorFunc(this.treeArray[higherPriorityChildIndex], this.treeArray[index])) {
+        this._dataMap[this._getIdFromData(this.treeArray[index])] = higherPriorityChildIndex;
+        this._dataMap[this._getIdFromData(this.treeArray[higherPriorityChildIndex])] = index;
         swap(this.treeArray, index, higherPriorityChildIndex);
         index = higherPriorityChildIndex;
       } else {
-        // once no swap is required, break the loop cause no need to compare upward anymore
+        // once no swap is required, break the loop cause no need to compare downwards anymore
         break;
       }
     }
@@ -173,27 +195,29 @@ export class BinaryHeap<TDataType> {
    */
   insert(data: TDataType): void {
     this.treeArray.push(data);
+    this._dataMap[this._getIdFromData(data)] = this.treeArray.length - 1;
     this._siftUp(this.treeArray.length - 1);
   }
 
   /**
-   * O(n)
+   * O(1)
    *
-   * Find the `data` in the tree and return its index.
+   * Find the `data` in the `treeArray` and return its index.
+   *
+   * If we don't maintain `_dataMap`, finding the data's index in the `treeArray`
+   * is done by a linear search which will cost O(n). With the help of maintaining
+   * this `_dataMap`, we can get the `index` by O(1), the down side is, every time
+   * we do `siftUp/siftDown` we need to update this map.
    */
-  private _findIndex(data: TDataType, customEqual?: (data1: TDataType, data2: TDataType) => boolean): number {
-    for (let i = 1; i < this.treeArray.length; i++) {
-      if (customEqual) {
-        if (customEqual(this.treeArray[i], data)) {
-          return i;
-        }
-      } else {
-        if (this.treeArray[i] === data) {
-          return i;
-        }
-      }
+  findIndex(data: TDataType): number {
+    return this._dataMap[this._getIdFromData(data)] ?? -1;
+  }
+
+  find(idOfData: number | string): TDataType {
+    if (this._dataMap[idOfData]) {
+      return this.treeArray[this._dataMap[idOfData]];
     }
-    return -1;
+    return null;
   }
 
   /**
@@ -204,24 +228,24 @@ export class BinaryHeap<TDataType> {
    */
   private _deleteIndex(index: number): void {
     if (index === this.treeArray.length - 1) {
-      this.treeArray.pop();
+      const deletedItem = this.treeArray.pop();
+      delete this._dataMap[this._getIdFromData(deletedItem)];
     } else {
       const last = this.treeArray.pop();
+      delete this._dataMap[this._getIdFromData(this.treeArray[index])];
       this.treeArray[index] = last;
+      this._dataMap[this._getIdFromData(last)] = index;
       this._siftDown(index);
     }
   }
 
   /**
-   * O(n)
+   * O(log(n))
    *
    * Delete the `data`, find it first via `_find` then delete it via `_deleteIndex`.
-   *
-   * Note: for custom `TDataType`, pass the `customEqual` as 2nd parameter so we can
-   * use that function to do custom logic to check equality for two items.
    */
-  delete(data: TDataType, customEqual?: (data1: TDataType, data2: TDataType) => boolean): void {
-    const index = this._findIndex(data, customEqual);
+  delete(data: TDataType): void {
+    const index = this.findIndex(data);
     if (index === -1) {
       return;
     }
