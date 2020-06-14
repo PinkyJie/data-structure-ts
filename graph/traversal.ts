@@ -13,12 +13,12 @@ export function bfsGraphTraversal(graph: Graph, doVisit: (vertex: Vertex) => voi
   for (let vertexId = 0; vertexId < graph.numberOfVertices; vertexId++) {
     queue.push(vertexId);
     while (queue.length > 0) {
-      const vertexId = queue.shift();
-      if (visited[vertexId]) {
+      const vertexIdInQueue = queue.shift();
+      if (visited[vertexIdInQueue]) {
         continue;
       }
-      visited[vertexId] = true;
-      const vertex = graph.vertices[vertexId];
+      visited[vertexIdInQueue] = true;
+      const vertex = graph.vertices[vertexIdInQueue];
       doVisit(vertex);
       let node = vertex.edges.dummyHead.nextNode;
       while (node) {
