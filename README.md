@@ -1,6 +1,6 @@
 # data-structure-ts
 
-![](https://img.shields.io/github/workflow/status/PinkyJie/data-structure-ts/Run%20test?style=flat)
+![](https://img.shields.io/github/workflow/status/PinkyJie/data-structure-ts/unit_test?style=flat)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=PinkyJie_data-structure-ts&metric=alert_status)](https://sonarcloud.io/dashboard?id=PinkyJie_data-structure-ts)
 [![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=PinkyJie_data-structure-ts&metric=coverage)](https://sonarcloud.io/component_measures/metric/coverage/list?id=PinkyJie_data-structure-ts)
 [![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=PinkyJie_data-structure-ts&metric=bugs)](https://sonarcloud.io/component_measures/metric/reliability_rating/list?id=PinkyJie_data-structure-ts)
