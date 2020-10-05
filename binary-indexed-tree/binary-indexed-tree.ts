@@ -10,10 +10,10 @@
  * so if one element is updated in the original array, only limited number of tree nodes need to
  * update.
  *    - it's not a real tree structure in storage, it's just an array with (n+1) elements, 1 more
- * element than the original array in term of space, index 0 is the dummy node, index 1-n will
- * store the actual prefix sum.
+ * element than the original array in term of space because index 0 is the dummy node, index 1~n
+ * will store the actual prefix sum.
  *
- * Note: we will use `array index` to represent the original array index 0 - (n-1), and use `node index`
+ * Note: we will use `array index` to represent the original array index 0 ~ (n-1), and use `node index`
  * to represent the index for the binary indexed tree storage array index. NodeIndex = ArrayIndex + 1.
  *
  * How to get the parent-child relationship?
@@ -24,13 +24,13 @@
  *        /    /      \     \               1          1                  0 -> 0
  *       1     2      4      8              4          100                0 -> 0
  *             |     / \    / \             5        101                100 -> 4
- *             3    5   6  9  10            9       1001               1000 -> 8
- *                      |      |            7        111                110 -> 6
+ *             3    5   6  9  10            7        111                110 -> 6
+ *                      |      |            9       1001               1000 -> 8
  *                      7     11            11      1011               1010 -> 10
  *
  * What's the value inside the node?
  *    - node 0's value is 0, it doesn't store anything
- *    - for other nodes, the value is Sum[parentNodeIndex-nodeIndex) e.g. from the parent node index
+ *    - for other nodes, the value is Sum[parentNodeIndex...nodeIndex) e.g. from the parent node index
  * to itself, but not including the ending node index
  *      - node 4's value is Sum[0...4) = value of array index 0 + value of array index 1 +
  * value of array index 2 + value of array index 3
@@ -58,9 +58,10 @@ export class BinaryIndexedTree {
   treeArray: number[];
 
   /**
-   * To build a binary indexed tree from an array, call `update()` above for each element
+   * To build a binary indexed tree from an array, call `update()` below for each element
    * to insert the element in the tree. Treat it as: by default all element in the array
    * is 0, we update each element with their real value by calling `update()`.
+   * Time: O(nlog(n))
    */
   buildTree(array: number[]): void {
     this.treeArray = Array.from({ length: array.length + 1 }, () => 0);
@@ -119,8 +120,8 @@ export class BinaryIndexedTree {
  *     1        1        0     + 1 -> 1      1    & 1    -> 1          1 - 1 -> 0
  *     4        100      011   + 1 -> 100    100  & 100  -> 100 (4)    4 - 4 -> 0
  *     5        101      010   + 1 -> 011    101  & 011  -> 1          5 - 1 -> 4
- *     10       1010     0101  + 1 -> 0110   1010 & 0110 -> 10 (2)    10 - 2 -> 8
  *     7        111      000   + 1 -> 001    111  & 001  -> 1          7 - 1 -> 6
+ *     10       1010     0101  + 1 -> 0110   1010 & 0110 -> 10 (2)    10 - 2 -> 8
  *     11       1011     0100  + 1 -> 0101   1011 & 0101 -> 1         11 - 1 -> 10
  */
 function _getParentNodeIndex(nodeIndex: number): number {
@@ -137,8 +138,8 @@ function _getParentNodeIndex(nodeIndex: number): number {
  *     1        1        0     + 1 -> 1      1    & 1    -> 1          1 + 1 -> 2
  *     4        100      011   + 1 -> 100    100  & 100  -> 100 (4)    4 + 4 -> 8
  *     5        101      010   + 1 -> 011    101  & 011  -> 1          5 + 1 -> 6
- *     10       1010     0101  + 1 -> 0110   1010 & 0110 -> 10 (2)    10 + 2 -> 12
  *     7        111      000   + 1 -> 001    111  & 001  -> 1          7 + 1 -> 8
+ *     10       1010     0101  + 1 -> 0110   1010 & 0110 -> 10 (2)    10 + 2 -> 12
  *     11       1011     0100  + 1 -> 0101   1011 & 0101 -> 1         11 + 1 -> 12
  */
 function _getNextAffectedNodeIndex(nodeIndex: number): number {

@@ -12,7 +12,7 @@ export function detectCycleWithDisjointSet(graph: Graph): boolean {
 
   const disjointSet = new DisjointSet(graph.numberOfVertices);
   for (let vertexId = 0; vertexId < graph.numberOfVertices; vertexId++) {
-    const rootForI = disjointSet.find(vertexId);
+    const rootForVertex = disjointSet.find(vertexId);
     const vertex = graph.vertices[vertexId];
     let node = vertex.edges.dummyHead.nextNode;
     while (node) {
@@ -20,7 +20,7 @@ export function detectCycleWithDisjointSet(graph: Graph): boolean {
       if (visitedEdges[targetVertexId] !== vertexId) {
         visitedEdges[vertexId] = targetVertexId;
         const rootForNode = disjointSet.find(targetVertexId);
-        if (rootForI === rootForNode) {
+        if (rootForVertex === rootForNode) {
           return true;
         }
         disjointSet.union(vertexId, targetVertexId);

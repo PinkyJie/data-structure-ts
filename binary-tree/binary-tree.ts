@@ -4,7 +4,7 @@ export class BinaryTreeNode<TDataType> {
   rightChild: BinaryTreeNode<TDataType>;
 
   /**
-   * For some kind of binary trees (like AVL tree), we need to store the `height`
+   * For some kind of binary trees (e.g. AVL tree), we need to store the `height`
    * at the node level to quickly calculate the height difference between different
    * sub trees.
    */

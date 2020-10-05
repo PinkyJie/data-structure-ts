@@ -46,7 +46,7 @@ export class BinaryHeap<TDataType> {
 
   /**
    * Priority comparator function: used to decide which element has higher priority,
-   * return true if first element has higher priority then the second one.
+   * return true if first element has higher priority than the second one.
    */
   private _priorityComparatorFunc: PriorityComparatorFunc<TDataType>;
 
@@ -81,7 +81,7 @@ export class BinaryHeap<TDataType> {
    *    a) insert null as its first element
    *    b) staring from the last parent node, do `_siftDown()`
    *
-   * There's strict mathematical proof of the time complexity equals to O(n) with
+   * There's a strict mathematical proof of the time complexity equals to O(n) with
    * Taylor series, the intuitive understanding is: the complexity of "_siftUp()"
    * and "_siftDown()" depends on the distance of the node to the top/bottom:
    *    - for "_siftUp()", it's the distance to the top of the tree, the closer it
@@ -101,7 +101,7 @@ export class BinaryHeap<TDataType> {
     array.unshift(null);
     const heap = new BinaryHeap(priorityComparatorFunc);
     heap.treeArray = array;
-    for (let i = Math.floor(array.length - 1 / 2); i > 0; i--) {
+    for (let i = Math.floor(array.length / 2); i > 0; i--) {
       heap._siftDown(i);
     }
     return heap;
@@ -134,7 +134,7 @@ export class BinaryHeap<TDataType> {
   /**
    *
    * Compare `index` with its parent, if it doesn't satisfy the heap property (e.g. larger
-   * then its parent for max heap), then swap it, until reach the root.
+   * than its parent for max heap), then swap it, until reach the root.
    */
   _siftUp(index: number): void {
     while (this._hasParent(index)) {
@@ -154,7 +154,7 @@ export class BinaryHeap<TDataType> {
   /**
    *
    * Compare `index` with its children, if doesn't satisfy the heap property (e.g. smaller
-   * then its children for max heap), then swap it with the larger child, until reach the end.
+   * than its children for max heap), then swap it with the larger child, until reach the end.
    */
   _siftDown(index: number): void {
     /**

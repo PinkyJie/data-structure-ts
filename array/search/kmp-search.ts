@@ -29,7 +29,7 @@ export function kmpSearch(text: string, pattern: string, matchOne = true): numbe
       if (matchOne) {
         break;
       }
-      //  Treat it as a mismatch and continue to match against remaining `text`.
+      // Treat it as a mismatch and continue to match against remaining `text`.
       patternIndex = lpsTable[patternIndex - 1];
     }
   }
@@ -42,8 +42,8 @@ export function kmpSearch(text: string, pattern: string, matchOne = true): numbe
  * LPS table: Longest prefix which is also a suffix
  * a table with m elements, each element is a "length" of the LPS, to calculate index k,
  * consider elements in `pattern` from [0...k], what is the longest prefix which can also
- * be the postfix, e.g. if the pattern [0...k] is "abcdab", then longest prefix which
- * can also be the postfix is "ab", so the index k of the LPS table is 2, the length of "ab".
+ * be the suffix, e.g. if the pattern [0...k] is "abcdab", then longest prefix which
+ * can also be the suffix is "ab", so the index k of the LPS table is 2, the length of "ab".
  * From the definition here we can also conclude that the first element in LPS table are always
  * 0, because for 1 character, there is no prefix/suffix thing.
  *
@@ -56,7 +56,7 @@ export function kmpSearch(text: string, pattern: string, matchOne = true): numbe
  */
 function _buildLPSTable(pattern: string): number[] {
   const m = pattern.length;
-  const lpsTable = [0];
+  const lpsTable = new Array(m).fill(0);
   let i = 1;
   /**
    * `lenOfLPS` has 2 meanings:
@@ -74,7 +74,7 @@ function _buildLPSTable(pattern: string): number[] {
        * consider this pattern:
        *  a  a  b  a  a  a  c
        *  0  1  0 (1)
-       * without this branch, the above value in parenthesis would be 2 which is wrong
+       * without this "if branch", the above value in parenthesis would be 2 which is wrong
        *
        * If current position does not match, but `lenOfLPS > 0`, which means at least last one
        * comparison is equaled (that's how `lenOfLPS++` happens), so we can't simply set

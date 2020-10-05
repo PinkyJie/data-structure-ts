@@ -1,5 +1,5 @@
 export class TrieNode {
-  /** the alphabet this node represents */
+  /** the character this node represents */
   char: string;
   /** other nodes this node points to, can be null */
   children: TrieNode[];
@@ -8,8 +8,8 @@ export class TrieNode {
 
   constructor(char: string) {
     this.char = char;
-    // english words only have 26 characters
-    this.children = Array.from({ length: 26 }, () => null);
+    // English words only have 26 characters
+    this.children = new Array(26).fill(null);
     this.isEndWord = false;
   }
 }
@@ -19,7 +19,7 @@ export class TrieNode {
  *    - a real tree structure in storage, commonly used for auto complete, spelling
  * check, phone contact search, where we need to use prefix string to match a lot of
  * words
- *    - each node represents a alphabet (a,b,c...), and can point to other nodes
+ *    - each node represents a character (a,b,c...), and can point to other nodes
  *    - think it as a dictionary which stores a lot of words, e.g. the
  * following trie stores 2 words ("bag" and "cat"), "T" denotes `isEndWord = true`,
  * means this node is the end of a valid word
@@ -92,9 +92,10 @@ export class Trie {
     // the last char node
     node.isEndWord = false;
     /**
-     * Check all the nodes passed on the path to see if we need to remove them:
+     * Check all the nodes visited on the path to see if we need to remove them:
      *    - if node is not a end of word, or node has no children, then delete it
      *    - we need to check all the nodes on the path one by one upwards (Stack)
+     * because we need to do delete from the parent node (previous index)
      */
     while (nodesOnPath.length > 0) {
       const pathNode = nodesOnPath.pop();
@@ -153,11 +154,12 @@ function _deleteChar(node: TrieNode, word: string, index: number): boolean {
     return !node.children.some((child) => !!child);
   }
   const childIndex = _getChildIndexFromChar(word.charAt(index + 1));
+  // having this because node needs to be deleted from its parent
   const shouldDelete = _deleteChar(node.children[childIndex], word, index + 1);
   if (shouldDelete && !node.children[childIndex].isEndWord) {
     node.children[childIndex] = null;
-    return node.children.some((child) => !!child);
+    return !node.isEndWord && !node.children.some((child) => !!child);
   }
-  // if `nextNode` should not be deleted, then obviously `node` should not be delete
+  // if child node should not be deleted, then obviously `node` should not be delete
   return false;
 }

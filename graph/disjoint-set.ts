@@ -9,7 +9,7 @@ export class DisjointSet {
   private roots: number[] = [];
 
   /**
-   * `ranks` array: by default all vertices have rank 0.when we have a edge [0, 1],
+   * `ranks` array: by default all vertices have rank 0, when we have a edge [0, 1],
    * we should decide who is whose root by their ranks:
    *    - if the two vertices have the same rank (e.g. for 1st edge, they are both 0),
    * we do `roots[0] = 1`, then `ranks[1]++` (root vertex's rank gets increased)
@@ -23,6 +23,7 @@ export class DisjointSet {
 
   constructor(numberOfVertices: number) {
     for (let i = 0; i < numberOfVertices; i++) {
+      // by default each vertex's root is itself
       this.roots.push(i);
       this.ranks.push(0);
     }

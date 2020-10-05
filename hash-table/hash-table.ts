@@ -5,7 +5,7 @@ import { SinglyLinkedList, SinglyLinkedListNode } from '../linked-list/singly-li
  *    - store the key/value pair in array
  *
  * Note: in Javascript we can use `{}` for hash table, here is
- * to demonstrate some basic conception to implement a hash table
+ * to demonstrate some basic conceptions of the implementation of a hash table
  * from the scratch.
  */
 export class HashTable<KeyType, ValueType> {
@@ -38,7 +38,7 @@ export class HashTable<KeyType, ValueType> {
 
   constructor(defaultSize: number, hashFunc: (key: KeyType, arrayLength: number) => number) {
     // initialize the array with default size, by default each item is null
-    this.array = Array.from({ length: defaultSize }, () => null);
+    this.array = new Array(defaultSize).fill(null);
     this.hashFunc = hashFunc;
   }
 
@@ -48,7 +48,7 @@ export class HashTable<KeyType, ValueType> {
    * O(n) - need to re-hash every existing item
    */
   private _resize(): void {
-    const newArray = Array.from({ length: this.array.length * 2 }, () => null);
+    const newArray = new Array(this.array.length * 2).fill(null);
     this.array.forEach((item) => {
       if (item && !item.isEmpty()) {
         let node = item.dummyHead.nextNode;

@@ -68,7 +68,7 @@ export class SinglyLinkedList<TDataType> {
     while (node.nextNode) {
       if (node.nextNode.data === data) {
         const deletedNode = node.nextNode;
-        node.nextNode = node.nextNode.nextNode;
+        node.nextNode = deletedNode.nextNode;
         return deletedNode;
       }
       node = node.nextNode;

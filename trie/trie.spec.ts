@@ -3,7 +3,7 @@ import { Trie } from './trie';
 describe('Trie:', () => {
   it('should insert/search/delete/list words correctly', () => {
     const trie = new Trie();
-    const words = ['app', 'apple', 'bag', 'baggage', 'cat', 'cater'];
+    const words = ['app', 'apple', 'bag', 'bagg', 'baggage', 'cat', 'cater'];
 
     // insert all words into the trie
     words.forEach((word) => {
@@ -35,14 +35,16 @@ describe('Trie:', () => {
     expect(trie.root.children[2]).toBeNull();
 
     // only "b" words left
-    expect(trie.listAllWords()).toEqual(['bag', 'baggage']);
+    expect(trie.listAllWords()).toEqual(['bag', 'bagg', 'baggage']);
 
     // delete with recursive method
-    trie.deleteWordRecursive('baggage');
-    expect(trie.searchWord('baggage')).toBe(false);
+    trie.deleteWordRecursive('bagg');
+    expect(trie.searchWord('bagg')).toBe(false);
     expect(trie.searchWord('bag')).toBe(true);
-    trie.deleteWord('bag');
-
+    expect(trie.searchWord('baggage')).toBe(true);
+    trie.deleteWordRecursive('bag');
+    expect(trie.listAllWords()).toEqual(['baggage']);
+    trie.deleteWordRecursive('baggage');
     expect(trie.listAllWords()).toEqual([]);
   });
 });

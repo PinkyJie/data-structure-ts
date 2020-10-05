@@ -16,6 +16,9 @@
  * 3. After finding the target, mark it as the new source and repeat 2 until the next
  * target equals to the original left most vertex.
  *
+ * Time: O(mn) - n is the number of all vertices, m is the number of vertices on the hull,
+ * because for each vertex on the hull, we need to go through all other vertices.
+ *
  * @param vertices a group of vertices represents by x,y coordinates
  */
 export function convexHull(vertices: [number, number][]): [number, number][] {
@@ -29,10 +32,10 @@ export function convexHull(vertices: [number, number][]): [number, number][] {
   while (true) {
     let targetIndex = 0;
     for (let i = 0; i < vertices.length; i++) {
-      const vertex = vertices[i];
       if (i === sourceIndex || i === targetIndex) {
         continue;
       }
+      const vertex = vertices[i];
       const crossProduct = _crossProduct(vertices[sourceIndex], vertices[targetIndex], vertex);
       if (crossProduct === 0) {
         const distance1 = _distance(vertices[sourceIndex], vertices[targetIndex]);
@@ -79,6 +82,8 @@ function _findLeftMostVertexIndex(vertexCoordinates: [number, number][]): number
  *    - if the result < 0, vertexC is on the right side of the line
  *    - if the result = 0, vertexC is on the same line of AB
  *    - if the result > 0, vertexC is on the left side of the line
+ *
+ * https://www.youtube.com/watch?v=eu6i7WJeinw
  */
 function _crossProduct(vertexA: [number, number], vertexB: [number, number], vertexC: [number, number]): number {
   const x1 = vertexB[0] - vertexA[0];
@@ -89,5 +94,5 @@ function _crossProduct(vertexA: [number, number], vertexB: [number, number], ver
 }
 
 function _distance(vertexA: [number, number], vertexB: [number, number]): number {
-  return (vertexB[0] - vertexA[0]) ** 2 - (vertexB[1] - vertexB[0]) ** 2;
+  return (vertexB[0] - vertexA[0]) ** 2 - (vertexB[1] - vertexA[1]) ** 2;
 }

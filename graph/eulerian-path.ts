@@ -3,6 +3,8 @@ import { Graph } from './graph';
 /**
  * Eulerian Path for directed graph: find a path which can traverse all the
  * edges exactly once.
+ *
+ * https://www.youtube.com/watch?v=8MpoO2zA2l4
  */
 export function findEulerianPathInDirectedGraph(graph: Graph): number[] {
   const { inDegrees, outDegrees } = _calculateInOutDegrees(graph);

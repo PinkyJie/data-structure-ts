@@ -26,7 +26,7 @@ export type RangedAggregationFunc = (leftChildData: number, rightChildData: numb
  * Segment Tree:
  *    - similar as Binary Indexed Tree, store aggregated range data on each node, commonly used
  * to calculated ranged sum/min/max
- *    - it's a tree in term of storage
+ *    - it's a real tree in term of storage
  *    - only the leaf node will store the actual data from the original array, all the parent nodes
  * will store the ranged aggregation data (RA)
  *
@@ -82,7 +82,7 @@ function _buildTree(
   if (startIndex === endIndex) {
     return new SegmentTreeNode(array[startIndex], startIndex, endIndex);
   }
-  const middleIndex = Math.floor((startIndex + endIndex) / 2);
+  const middleIndex = startIndex + Math.floor((endIndex - startIndex) / 2);
   const leftChild = _buildTree(array, startIndex, middleIndex, calcRangedAggregation);
   const rightChild = _buildTree(array, middleIndex + 1, endIndex, calcRangedAggregation);
   const data = calcRangedAggregation(leftChild.data, rightChild.data);
@@ -149,9 +149,11 @@ function _queryRangedAggregation(
     return node.data;
   }
   const middleIndex = Math.floor((node.startIndex + node.endIndex) / 2);
+  // completely on left side
   if (endIndex <= middleIndex) {
     return _queryRangedAggregation(node.leftChild, startIndex, endIndex, calcRangedAggregation);
   }
+  // completely on right side
   if (startIndex > middleIndex) {
     return _queryRangedAggregation(node.rightChild, startIndex, endIndex, calcRangedAggregation);
   }

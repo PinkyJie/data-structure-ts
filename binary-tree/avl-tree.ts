@@ -45,7 +45,7 @@ export class AVLTree extends BinarySearchTree {
  *   / \       < - - - - - - -         / \
  *  T1 T2      Left Rotation          T2 T3
  *
- * it could maintain `data(T1) < data(x) < data(T2) < data(y) < data(T3)`
+ * it could maintain `data(T1) < data(x) < data(T2) < data(y) < data(T3)` for
  * both before and after rotation
  */
 
@@ -81,8 +81,7 @@ function _rightRotate(y: AVLTreeNode): AVLTreeNode {
 
 /**
  * 1. perform normal BST insertion
- * 2. check the height difference fore the node
- * 3. do re-balance if the difference is larger than 1
+ * 2. do re-balance with the node
  */
 function _insert(node: AVLTreeNode, data: number): AVLTreeNode {
   // normal BST insertion
@@ -109,8 +108,7 @@ function _insert(node: AVLTreeNode, data: number): AVLTreeNode {
 
 /**
  * 1. perform normal BST deletion
- * 2. check the height difference fore the node
- * 3. do re-balance if the difference is larger than 1
+ * 2. do re-balance with the node
  */
 function _delete(node: AVLTreeNode, data: number): AVLTreeNode {
   // normal BST deletion
@@ -146,15 +144,16 @@ function _findRightMostNode(node: AVLTreeNode): AVLTreeNode {
 
 /**
  * What we need to do here is to check the height difference for each
- * passed node to see if it violates the rule |H(left) - H(right)| > 1.
+ * "visited node" (visited during insertion/deletion) to see if it violates the rule
+ * |H(left) - H(right)| > 1.
  *
  * If node `v` violates, we need to do rotation to fix it:
  *  - check its child node `c` and grand child node `p` on the travelled path
  *  - there will be 4 different cases:
  *    - 1. Left Left   -> `v`'s left height is larger than right, `c`'s left is larger than right
  *    - 2. Left Right  -> `v`'s left height is larger than right, `c`'s right is larger than left
- *    - 3. Right Left  -> `v`'s right height is larger than left, `c`'s left is larger than right
- *    - 4. Right Right -> `v`'s right height is larger than left, `c`'s right is larger than left
+ *    - 3. Right Right -> `v`'s right height is larger than left, `c`'s right is larger than left
+ *    - 4. Right Left  -> `v`'s right height is larger than left, `c`'s left is larger than right
  *  - handle these 4 cases with different strategy:
  *      1.   v      right rotation on v         c
  *          / \                               /   \
@@ -238,7 +237,7 @@ function _getHeightDifference(node: AVLTreeNode): number {
  *    /                         /
  *   z (h:0)                   z (h:1)
  * For node x, obviously it's unbalanced, but if we follow the original height() [Left]
- * calculation, its left sub tree height (y - 1) minus its right sub tree height 0
+ * calculation, its left sub tree height (y's height -> 1) minus its right sub tree height 0
  * will be 1, which does not violate the rule. If we choose the new height (Right), its
  * left sub tree height is 2, right sub tree height is 0, which violates the rule. Basically
  * we set leaf node's height to 1 so we can distinguish leaf node with null node.

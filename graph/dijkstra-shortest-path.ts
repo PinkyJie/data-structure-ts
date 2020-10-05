@@ -2,7 +2,7 @@ import { BinaryHeap } from '../binary-heap/binary-heap';
 import { Graph, Vertex } from './graph';
 
 /**
- * Dijkstra's shortest path O(Elog(V)) - E: number of edges V: number of vertices
+ * Dijkstra's shortest path O((V+E)log(V)) - E: number of edges V: number of vertices
  *    - single source shortest path algorithm for graphs with non-negative
  * edge weights, given a graph and a source vertex, this algorithm will find
  * the shortest path from this source vertex to all other vertices
@@ -65,7 +65,7 @@ export function findDijkstraShortestPath(
   }>(
     /** vertex which has lower distance has higher priority */
     (a, b) => a.distance < b.distance,
-    /** use vertex's label as the identifer fo the heap data */
+    /** use vertex's label as the identifer for the heap data */
     (data) => data.vertex.label,
   );
 
@@ -85,10 +85,9 @@ export function findDijkstraShortestPath(
     let node = vertex.edges.dummyHead.nextNode;
     while (node) {
       const { targetVertex, weight } = node.data;
-      const targetVertexInHeap = minHeap.find(targetVertex.label);
+      const targetVertexInHeap = minHeap.find(targetVertex.label); // O(1)
       if (targetVertexInHeap && targetVertexInHeap.distance > distanceMap[vertex.label] + weight) {
         parentMap[targetVertex.label] = vertex;
-        const targetVertexIndexInHeap = minHeap.findIndex(targetVertexInHeap);
         targetVertexInHeap.distance = distanceMap[vertex.label] + weight;
         /**
          * re-balance the heap after updating the distance, why only `siftUp` is required?
@@ -97,6 +96,7 @@ export function findDijkstraShortestPath(
          * the value, it doesn't affect their children nodes (still smaller than children
          * nodes), that's why only comparing with parent (siftUp) is required here.
          */
+        const targetVertexIndexInHeap = minHeap.findIndex(targetVertexInHeap); // O(1)
         minHeap._siftUp(targetVertexIndexInHeap); // O(log(V))
       }
       node = node.nextNode;

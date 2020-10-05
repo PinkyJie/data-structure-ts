@@ -54,8 +54,8 @@ export class Graph {
   numberOfVertices: number;
 
   /**
-   * vertices in the graph, the index of the array is the index of
-   * the vertices
+   * vertices in the graph, the index of the array is the id of
+   * the vertex
    */
   vertices: Vertex[] = [];
 
