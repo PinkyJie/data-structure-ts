@@ -37,11 +37,15 @@ export class BinaryTree<TDataType> {
   toArrayDFS(): TDataType[] {
     const array: TDataType[] = [];
     _toArray<TDataType>(this.root, array);
+    // remove the trailing `null` cause they are unnecessary
+    while (array[array.length - 1] === null) {
+      array.pop();
+    }
     return array;
   }
 
   /**
-   * [0, 1, null, 2, 3, 4, null, 5, null, null, null, null, null] means:
+   * [0, 1, null, 2, 3, 4, null, 5] means:
    *  - 0 is the root node, its left is 1, right is null
    *  - 1's left is 2, right is 3
    *  - 2's left is 4, right is null
@@ -86,6 +90,10 @@ export class BinaryTree<TDataType> {
       } else {
         array.push(null);
       }
+    }
+    // remove the trailing `null` cause they are unnecessary
+    while (array[array.length - 1] === null) {
+      array.pop();
     }
     return array;
   }

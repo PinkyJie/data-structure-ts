@@ -4,35 +4,35 @@ import { inOrder, preOrder, postOrder } from './traversal';
 describe('Binary tree traversal', () => {
   it.each<{ treeArray: number[]; inOrderResult: number[]; preOrderResult: number[]; postOrderResult: number[] }>([
     {
-      treeArray: [0, 1, 2, null, 3, null, null, 4, null, null, 5, null, null],
+      treeArray: [0, 1, 2, null, 3, null, null, 4, null, null, 5],
       inOrderResult: [1, 4, 5, 3, 0, 2],
       preOrderResult: [0, 1, 3, 4, 5, 2],
       postOrderResult: [5, 4, 3, 1, 2, 0],
     },
     // right sub tree is empty
     {
-      treeArray: [0, 1, null, 2, 3, 4, 5, null, null, null, null, null, null],
+      treeArray: [0, 1, null, 2, 3, 4, 5],
       inOrderResult: [4, 2, 5, 1, 3, 0],
       preOrderResult: [0, 1, 2, 4, 5, 3],
       postOrderResult: [4, 5, 2, 3, 1, 0],
     },
     // left sub tree is empty
     {
-      treeArray: [0, null, 1, 2, 3, null, null, 4, 5, null, null, null, null],
+      treeArray: [0, null, 1, 2, 3, null, null, 4, 5],
       inOrderResult: [0, 2, 1, 4, 3, 5],
       preOrderResult: [0, 1, 2, 3, 4, 5],
       postOrderResult: [2, 4, 5, 3, 1, 0],
     },
     // left skewed tree
     {
-      treeArray: [0, 1, null, 2, null, 3, null, 4, null, null, null],
+      treeArray: [0, 1, null, 2, null, 3, null, 4],
       inOrderResult: [4, 3, 2, 1, 0],
       preOrderResult: [0, 1, 2, 3, 4],
       postOrderResult: [4, 3, 2, 1, 0],
     },
     // right skewed tree
     {
-      treeArray: [0, null, 1, null, 2, null, 3, null, 4, null, null],
+      treeArray: [0, null, 1, null, 2, null, 3, null, 4],
       inOrderResult: [0, 1, 2, 3, 4],
       preOrderResult: [0, 1, 2, 3, 4],
       postOrderResult: [4, 3, 2, 1, 0],
