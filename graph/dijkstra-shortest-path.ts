@@ -71,14 +71,14 @@ export function findDijkstraShortestPath(
 
   // construct heap: O(Vlog(V))
   for (let vertexId = 0; vertexId < graph.numberOfVertices; vertexId++) {
-    minHeap.insert({
+    minHeap.push({
       vertex: graph.vertices[vertexId],
       distance: vertexId === sourceVertexId ? 0 : Infinity,
     });
   }
 
   while (!minHeap.isEmpty()) {
-    const data = minHeap.getHighestPriorityData();
+    const data = minHeap.peek();
     minHeap.delete(data); // O(log(V))
     const { vertex, distance } = data;
     distanceMap[vertex.label] = distance;
@@ -97,7 +97,7 @@ export function findDijkstraShortestPath(
          * nodes), that's why only comparing with parent (siftUp) is required here.
          */
         const targetVertexIndexInHeap = minHeap.findIndex(targetVertexInHeap); // O(1)
-        minHeap._siftUp(targetVertexIndexInHeap); // O(log(V))
+        minHeap._heapifyUp(targetVertexIndexInHeap); // O(log(V))
       }
       node = node.nextNode;
     }

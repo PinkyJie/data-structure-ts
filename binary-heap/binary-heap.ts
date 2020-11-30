@@ -34,6 +34,7 @@ export class BinaryHeap<TDataType> {
   /**
    * A map to get the `treeArray` index by the `data`, especially useful for
    * searching.
+   * Note: this can't handle duplicate items inside the Heap.
    */
   private _dataMap: {
     [idOfData: string]: number;
@@ -69,7 +70,7 @@ export class BinaryHeap<TDataType> {
   ): BinaryHeap<TDataType> {
     const heap = new BinaryHeap(priorityComparatorFunc);
     array.forEach((item) => {
-      heap.insert(item);
+      heap.push(item);
     });
     return heap;
   }
@@ -79,19 +80,19 @@ export class BinaryHeap<TDataType> {
    *
    * Construct the heap in place with the array (modify the array directly):
    *    a) insert null as its first element
-   *    b) staring from the last parent node, do `_siftDown()`
+   *    b) staring from the last parent node, do `_heapifyDown()`
    *
    * There's a strict mathematical proof of the time complexity equals to O(n) with
-   * Taylor series, the intuitive understanding is: the complexity of "_siftUp()"
-   * and "_siftDown()" depends on the distance of the node to the top/bottom:
-   *    - for "_siftUp()", it's the distance to the top of the tree, the closer it
+   * Taylor series, the intuitive understanding is: the complexity of "_heapifyUp()"
+   * and "_heapifyDown()" depends on the distance of the node to the top/bottom:
+   *    - for "_heapifyUp()", it's the distance to the top of the tree, the closer it
    * is to the top, the less comparison/swap is needed, so it's more efficient for
    * nodes in the top of the tree.
-   *    - for "_siftDown()", it's the distance to the bottom of the tree, the closer
+   *    - for "_heapifyDown()", it's the distance to the bottom of the tree, the closer
    * it is to the bottom, the less comparison/swap is needed, so it's more efficient
    * for nodes in the bottom of the tree.
    * Take this fact into consideration: there is only 1 root node and majority of the
-   * nodes are in the bottom for the tree, so if we use "_siftDown()" completely to
+   * nodes are in the bottom for the tree, so if we use "_heapifyDown()" completely to
    * build a heap, it will be more efficient.
    */
   static buildHeapInPlace<TDataType>(
@@ -102,7 +103,7 @@ export class BinaryHeap<TDataType> {
     const heap = new BinaryHeap(priorityComparatorFunc);
     heap.treeArray = array;
     for (let i = Math.floor(array.length / 2); i > 0; i--) {
-      heap._siftDown(i);
+      heap._heapifyDown(i);
     }
     return heap;
   }
@@ -136,7 +137,7 @@ export class BinaryHeap<TDataType> {
    * Compare `index` with its parent, if it doesn't satisfy the heap property (e.g. larger
    * than its parent for max heap), then swap it, until reach the root.
    */
-  _siftUp(index: number): void {
+  _heapifyUp(index: number): void {
     while (this._hasParent(index)) {
       const parentIndex = this._getParentIndex(index);
       if (this._priorityComparatorFunc(this.treeArray[index], this.treeArray[parentIndex])) {
@@ -156,7 +157,7 @@ export class BinaryHeap<TDataType> {
    * Compare `index` with its children, if doesn't satisfy the heap property (e.g. smaller
    * than its children for max heap), then swap it with the larger child, until reach the end.
    */
-  _siftDown(index: number): void {
+  _heapifyDown(index: number): void {
     /**
      * To check if this node has children, checking left child existence is enough here,
      * cause complete binary tree can't only have right child.
@@ -191,12 +192,23 @@ export class BinaryHeap<TDataType> {
    * O(log(n))
    *
    * Insert the `data` to the last node of the tree (push to array), then
-   * compare it with its parent to adjust its position through `_siftUp()`.
+   * compare it with its parent to adjust its position through `_heapifyUp()`.
    */
-  insert(data: TDataType): void {
+  push(data: TDataType): void {
     this.treeArray.push(data);
     this._dataMap[this._getIdFromData(data)] = this.treeArray.length - 1;
-    this._siftUp(this.treeArray.length - 1);
+    this._heapifyUp(this.treeArray.length - 1);
+  }
+
+  /**
+   * O(log(n))
+   *
+   * Remove the top node from the tree.
+   */
+  pop(): TDataType {
+    const top = this.peek();
+    this._deleteIndex(1);
+    return top;
   }
 
   /**
@@ -207,7 +219,7 @@ export class BinaryHeap<TDataType> {
    * If we don't maintain `_dataMap`, finding the data's index in the `treeArray`
    * is done by a linear search which will cost O(n). With the help of maintaining
    * this `_dataMap`, we can get the `index` by O(1), the down side is, every time
-   * we do `siftUp/siftDown` we need to update this map.
+   * we do `heapifyUp/heapifyDown` we need to update this map.
    */
   findIndex(data: TDataType): number {
     return this._dataMap[this._getIdFromData(data)] ?? -1;
@@ -224,7 +236,7 @@ export class BinaryHeap<TDataType> {
    * O(log(n))
    *
    * Replace the `index` with the last node of the tree (last element in the array),
-   * then compare it with its children to adjust its position through `_siftDown()`.
+   * then compare it with either parent or children to adjust its position respectively.
    */
   private _deleteIndex(index: number): void {
     if (index === this.treeArray.length - 1) {
@@ -235,7 +247,32 @@ export class BinaryHeap<TDataType> {
       delete this._dataMap[this._getIdFromData(this.treeArray[index])];
       this.treeArray[index] = last;
       this._dataMap[this._getIdFromData(last)] = index;
-      this._siftDown(index);
+      /**
+       * If the deletion happens in the middle of the tree, after replacing the last tree
+       * node to the deleted `index`, the new number can be larger than parent, so we need
+       * to check here, if it has higher priority than its parent, then do heapify up, otherwise
+       * do heapify down.
+       *
+       * Take this min heap as an example:
+       *                         1
+       *                    /         \
+       *                   5          15
+       *                 /   \       /  \
+       *                9    11     18  20
+       *               / \
+       *              17  12
+       *
+       *  * if we are deleting 5, 12 will be moved to the left child of node 1, it's larger than
+       * its both children, so need to do heapify down
+       *  * if we are deleting 18, 12 will be moved to the right child of node 1, it's smaller
+       * than its parent, so need to do heapify up
+       *
+       */
+      if (this._hasParent(index) && this._priorityComparatorFunc(last, this.treeArray[this._getParentIndex(index)])) {
+        this._heapifyUp(index);
+      } else {
+        this._heapifyDown(index);
+      }
     }
   }
 
@@ -253,7 +290,7 @@ export class BinaryHeap<TDataType> {
   }
 
   /** O(1) - return the root node directly */
-  getHighestPriorityData(): TDataType {
+  peek(): TDataType {
     if (this.isEmpty()) {
       return null;
     }
