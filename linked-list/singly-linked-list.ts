@@ -8,6 +8,10 @@ export class SinglyLinkedListNode<TDataType> {
   }
 }
 
+/**
+ * Singly Linked list is used when insertion/deletion is the frequent in the
+ * collection.
+ */
 export class SinglyLinkedList<TDataType> {
   /** maintain a dummy head to prevent boilerplate null check */
   dummyHead: SinglyLinkedListNode<TDataType>;
@@ -143,7 +147,7 @@ export class SinglyLinkedList<TDataType> {
   detectLoop(): boolean {
     let oneStep = this.dummyHead.nextNode;
     let twoStep = this.dummyHead.nextNode;
-    while (oneStep && twoStep && twoStep.nextNode) {
+    while (twoStep && twoStep.nextNode) {
       oneStep = oneStep.nextNode;
       twoStep = twoStep.nextNode.nextNode;
       if (oneStep === twoStep) {
@@ -153,14 +157,17 @@ export class SinglyLinkedList<TDataType> {
     return false;
   }
 
-  /** find the middle value of all  */
+  /**
+   * Find the middle node of the linked list, if there are two middle nodes,
+   * return the second middle node.
+   */
   findMiddleNode(): SinglyLinkedListNode<TDataType> {
     if (this.isEmpty()) {
       return null;
     }
     let oneStep = this.dummyHead.nextNode;
     let twoStep = this.dummyHead.nextNode;
-    while (oneStep.nextNode && twoStep.nextNode && twoStep.nextNode.nextNode) {
+    while (twoStep && twoStep.nextNode) {
       oneStep = oneStep.nextNode;
       twoStep = twoStep.nextNode.nextNode;
     }

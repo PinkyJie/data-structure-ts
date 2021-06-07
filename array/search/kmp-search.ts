@@ -5,9 +5,10 @@
  * O(n) for worst case
  *
  * KMP is mainly used for string matching, e.g. match `pattern` [0...m] in `text` [0...n].
- * For the worst case (match happens at the end of `text`), the original search algorithm
- * will try to match the `pattern` for each character in `text`, which will cost O(m(n-m+1)),
- * while KMP can use the previously partial matching information, only costs O(n).
+ * For the worst case (match happens at the end of `text`, e.g. match `aaab` in
+ * `aaaaaaaaab`), the original search algorithm will try to match the `pattern` for each
+ * character in `text`, which will cost O(m(n-m+1)), while KMP can use the previously
+ * partial matching information, only costs O(n + m).
  */
 export function kmpSearch(text: string, pattern: string, matchOne = true): number[] {
   const m = pattern.length;

@@ -4,12 +4,12 @@
  *
  * Gift wrapping algorithm (Jarvis March):
  * 1. Find the left most vertex (whose x coordinate is the smallest)
- * 2. Make this left mots vertex as source, find the next target within the remaining
+ * 2. Make this left most vertex as source, find the next target within the remaining
  * vertices. Starting with vertex 0 as target candidate, draw a line between the left
  * most vertex and 0, for all remaining vertices, check if they are on the left side
  * of this line:
  *    a. if vertex k is on the same line, then compare current target with k, the one
- * who is farther from the source should be the new target, put another one in an
+ * who is further from the source should be the new target, put another one in an
  * Collinearity array (cause it should be included in the final result)
  *    b. if vertex k is on the left side of the line, then k should be the new target,
  * clear the previous Collinearity array

@@ -267,11 +267,11 @@ describe('Singly linked list', () => {
       const list2 = genSinglyLinkedListFromArray([1]);
       expect(list2.findMiddleNode().data).toBe(1);
       const list3 = genSinglyLinkedListFromArray([1, 2]);
-      expect(list3.findMiddleNode().data).toBe(1);
+      expect(list3.findMiddleNode().data).toBe(2);
       const list4 = genSinglyLinkedListFromArray([1, 2, 3]);
       expect(list4.findMiddleNode().data).toBe(2);
       const list5 = genSinglyLinkedListFromArray([1, 2, 3, 4]);
-      expect(list5.findMiddleNode().data).toBe(2);
+      expect(list5.findMiddleNode().data).toBe(3);
       const list6 = genSinglyLinkedListFromArray([1, 2, 3, 4, 5]);
       expect(list6.findMiddleNode().data).toBe(3);
     });

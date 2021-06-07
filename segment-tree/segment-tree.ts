@@ -114,7 +114,7 @@ function _update(
     node.data = data;
     return;
   }
-  const middleIndex = Math.floor((node.startIndex + node.endIndex) / 2);
+  const middleIndex = node.startIndex + Math.floor((node.endIndex - node.startIndex) / 2);
   // equal to `middleIndex` -> left
   if (index <= middleIndex) {
     _update(node.leftChild, index, data, calcRangedAggregation);
@@ -148,7 +148,7 @@ function _queryRangedAggregation(
     // find the correct range node
     return node.data;
   }
-  const middleIndex = Math.floor((node.startIndex + node.endIndex) / 2);
+  const middleIndex = node.startIndex + Math.floor((node.endIndex - node.startIndex) / 2);
   // completely on left side
   if (endIndex <= middleIndex) {
     return _queryRangedAggregation(node.leftChild, startIndex, endIndex, calcRangedAggregation);

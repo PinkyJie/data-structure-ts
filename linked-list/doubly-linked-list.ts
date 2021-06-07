@@ -10,6 +10,10 @@ class DoublyLinkedListNode<TDataType> {
   }
 }
 
+/**
+ * Doubly Linked list is used as a double ended queue: when we need to achieve
+ * O(1) for insert/delete element at both the start and the end of the queue.
+ */
 export class DoublyLinkedList<TDataType> {
   /** maintain a dummy head to prevent boilerplate null check */
   dummyHead: DoublyLinkedListNode<TDataType>;
@@ -25,20 +29,22 @@ export class DoublyLinkedList<TDataType> {
 
   /** inserts an element at the start/head of the linked list: O(1) */
   insertAtHead(data: TDataType): void {
+    const oldHead = this.dummyHead.nextNode;
     const newHead = new DoublyLinkedListNode(data);
     newHead.previousNode = this.dummyHead;
-    newHead.nextNode = this.dummyHead.nextNode;
-    newHead.previousNode.nextNode = newHead;
-    newHead.nextNode.previousNode = newHead;
+    this.dummyHead.nextNode = newHead;
+    newHead.nextNode = oldHead;
+    oldHead.previousNode = newHead;
   }
 
   /** inserts an element at the end of the linked list: O(1) */
   insertAtTail(data: TDataType): void {
+    const oldTail = this.dummyTail.previousNode;
     const newTail = new DoublyLinkedListNode(data);
-    newTail.previousNode = this.dummyTail.previousNode;
+    newTail.previousNode = oldTail;
+    oldTail.nextNode = newTail;
     newTail.nextNode = this.dummyTail;
-    newTail.previousNode.nextNode = newTail;
-    newTail.nextNode.previousNode = newTail;
+    this.dummyTail.previousNode = newTail;
   }
 
   /** deletes the first element of the linked list: O(1) */

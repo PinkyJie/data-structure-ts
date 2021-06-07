@@ -37,7 +37,7 @@ export class AVLTree extends BinarySearchTree {
 }
 
 /**
- * Re-balance technics: left/right rotation on sub tree rooted by y(LEFT) or x(RIGHT)
+ * Re-balance strategy: left/right rotation on sub tree rooted by y(LEFT) or x(RIGHT)
  *
  *      y                             x
  *     / \     Right Rotation        / \
