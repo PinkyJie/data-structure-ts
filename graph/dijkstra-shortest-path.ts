@@ -36,7 +36,9 @@ export function findDijkstraShortestPath(
 
   const distanceMap: {
     [targetVertexLabel: string]: number;
-  } = {};
+  } = {
+    [sourceVertex.label]: 0,
+  };
   const parentMap: {
     [targetVertexLabel: string]: Vertex;
   } = {
@@ -80,15 +82,16 @@ export function findDijkstraShortestPath(
   while (!minHeap.isEmpty()) {
     const data = minHeap.peek();
     minHeap.delete(data); // O(log(V))
-    const { vertex, distance } = data;
-    distanceMap[vertex.label] = distance;
+    const { vertex } = data;
     let node = vertex.edges.dummyHead.nextNode;
     while (node) {
       const { targetVertex, weight } = node.data;
       const targetVertexInHeap = minHeap.find(targetVertex.label); // O(1)
-      if (targetVertexInHeap && targetVertexInHeap.distance > distanceMap[vertex.label] + weight) {
+      const newDistance = distanceMap[vertex.label] + weight;
+      if (targetVertexInHeap && targetVertexInHeap.distance > newDistance) {
         parentMap[targetVertex.label] = vertex;
-        targetVertexInHeap.distance = distanceMap[vertex.label] + weight;
+        distanceMap[targetVertex.label] = newDistance;
+        targetVertexInHeap.distance = newDistance;
         /**
          * re-balance the heap after updating the distance, why only `siftUp` is required?
          * Note the fact that here the distance update can only be decreased (because it
