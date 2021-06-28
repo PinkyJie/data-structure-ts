@@ -17,6 +17,8 @@ Basic data structures and popular algorithms implemented in Typescript.
   - [Insertion Sort](./array/sorting/insertion-sort.ts)
   - [Quick Sort](./array/sorting/quick-sort.ts)
   - [Merge Sort](./array/sorting/merge-sort.ts)
+  - [Counting Sort](./array/sorting/counting-sort.ts)
+  - [Radix Sort](./array/sorting/radix-sort.ts)
   - [Bucket Sort](./array/sorting/bucket-sort.ts)
 
 - Array Searching
@@ -38,6 +40,7 @@ Basic data structures and popular algorithms implemented in Typescript.
   - [Convex Hull](./graph/convex-hull.ts)
   - [Eulerian Path](./graph/eulerian-path.ts)
   - [Dijkstra Shortest Path](./graph/dijkstra-shortest-path.ts)
+  - [A\* Path Finding](./graph/a-star-path-finding.ts)
 
 - Binary Tree
 
