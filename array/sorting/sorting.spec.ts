@@ -14,7 +14,7 @@ describe('Array: sorting', () => {
   }[] = [];
 
   for (let i = 0; i < 10; i++) {
-    const arr = Array.from({ length: 20 }, () => Math.floor(Math.random() * 40));
+    const arr = new Array(20).fill(0).map(() => Math.floor(Math.random() * 40));
     testArr.push({
       arr: [...arr],
       sortedArr: arr.sort((a, b) => a - b),

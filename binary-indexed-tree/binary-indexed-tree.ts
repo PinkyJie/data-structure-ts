@@ -64,7 +64,7 @@ export class BinaryIndexedTree {
    * Time: O(nlog(n))
    */
   buildTree(array: number[]): void {
-    this.treeArray = Array.from({ length: array.length + 1 }, () => 0);
+    this.treeArray = new Array(array.length + 1).fill(0);
     array.forEach((item, index) => this.update(index, item));
   }
 

@@ -17,14 +17,12 @@ export function findEulerianPathInDirectedGraph(graph: Graph): number[] {
   return paths;
 }
 
-function _calculateInOutDegrees(
-  graph: Graph,
-): {
+function _calculateInOutDegrees(graph: Graph): {
   inDegrees: number[];
   outDegrees: number[];
 } {
-  const inDegrees: number[] = Array.from({ length: graph.numberOfVertices }, () => 0);
-  const outDegrees: number[] = Array.from({ length: graph.numberOfVertices }, () => 0);
+  const inDegrees: number[] = new Array(graph.numberOfVertices).fill(0);
+  const outDegrees: number[] = new Array(graph.numberOfVertices).fill(0);
   for (let vertexId = 0; vertexId < graph.numberOfVertices; vertexId++) {
     const vertex = graph.vertices[vertexId];
     let node = vertex.edges.dummyHead.nextNode;

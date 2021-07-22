@@ -6,7 +6,7 @@ import { Graph, Vertex } from './graph';
  * Time: O(V + E) - V the number of vertices, E the number of edges
  */
 export function bfsGraphTraversal(graph: Graph, doVisit: (vertex: Vertex) => void): void {
-  const visited = Array.from({ length: graph.numberOfVertices }, () => false);
+  const visited = new Array(graph.numberOfVertices).fill(false);
 
   const queue: number[] = [];
   // for loop here in case some vertices are not connected with others
@@ -35,7 +35,7 @@ export function bfsGraphTraversal(graph: Graph, doVisit: (vertex: Vertex) => voi
  * Time: O(V + E) - V the number of vertices, E the number of edges
  */
 export function dfsGraphTraversal(graph: Graph, doVisit: (vertex: Vertex) => void): void {
-  const visited = Array.from({ length: graph.numberOfVertices }, () => false);
+  const visited = new Array(graph.numberOfVertices).fill(false);
 
   // for loop here in case some vertices are not connected with others
   for (let vertexId = 0; vertexId < graph.numberOfVertices; vertexId++) {

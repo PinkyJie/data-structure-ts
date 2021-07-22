@@ -207,7 +207,7 @@ describe('Singly linked list', () => {
     it('should return the size of the linked list', () => {
       expect(genSinglyLinkedListFromArray([]).size()).toBe(0);
       for (let i = 1; i < 10; i++) {
-        const list = Array.from({ length: i }, () => Math.floor(Math.random() * 40));
+        const list = new Array(i).fill(0).map(() => Math.floor(Math.random() * 40));
         const linkedList = genSinglyLinkedListFromArray(list);
         expect(linkedList.size()).toBe(list.length);
       }
@@ -227,7 +227,7 @@ describe('Singly linked list', () => {
 
     it('should reverse linked list in place', () => {
       for (let i = 0; i < 5; i++) {
-        const list = Array.from({ length: 20 }, () => Math.floor(Math.random() * 40));
+        const list = new Array(20).fill(0).map(() => Math.floor(Math.random() * 40));
         const linkedList = genSinglyLinkedListFromArray(list);
         linkedList.reverse();
         expect(linkedList.toArray()).toEqual(list.reverse());
